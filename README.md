@@ -354,7 +354,7 @@ Each parameter is displayed through a dedicated gauge widget.
 
 The dashboard receives the values processed by the Arduino Uno through the ESP32, allowing users to view the sensor readings remotely over Wi-Fi.
 
-# 🔬 Applications
+# 🔬 Applications :-
 
 The concepts demonstrated by this project can be extended to several practical applications:
 
@@ -372,7 +372,7 @@ The concepts demonstrated by this project can be extended to several practical a
 
 7. **Water Storage Monitoring:** Provides water-level and approximate volume information for storage containers.
 
-# ⚡ Challenges Faced During Development
+# ⚡ Challenges Faced During Development :-
 
 During the development of the prototype, several hardware and software integration challenges were encountered.
 
@@ -426,5 +426,4 @@ The current prototype provides a foundation for further development. Several imp
 - Physical purification performance should only be claimed after suitable purification hardware has been implemented and validated.
 
 **The primary objective of this project is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water quality beyond TDS.**
-<img width="1672" height="941" alt="AQUENZA Water Quality Dashboard" src="https://github.com/user-attachments/assets/fd8c510a-8a06-48ab-8ded-6f4881afd060" />
-
+<img width="1672" height="941" alt="AQUENZA Water Quality Dashboard (1)" src="https://github.com/user-attachments/assets/da64e8d3-76df-4939-9604-e90fa98d5418" />
