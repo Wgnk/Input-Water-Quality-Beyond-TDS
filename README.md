@@ -426,3 +426,4 @@ The current prototype provides a foundation for further development. Several imp
 - Physical purification performance should only be claimed after suitable purification hardware has been implemented and validated.
 
 **The primary objective of this project is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water quality beyond TDS.**
+<img width="791" height="300" alt="image" src="https://github.com/user-attachments/assets/845425c1-ffdc-4bfe-94d3-20efffdef050" />
