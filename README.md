@@ -1,4 +1,4 @@
-# 💧 Smart Water Purification and Quality Monitoring System for Rural and Mining-Affected Areas
+# 💧 Smart Water Purification and Quality Monitoring System
 
 A low-cost, Arduino-based water quality monitoring and screening prototype developed to address the limitations of conventional water quality assessment methods that primarily focus on Total Dissolved Solids (TDS). The project focuses on monitoring multiple water quality parameters, including TDS, pH, turbidity, and temperature, to provide a broader understanding of input water quality.
 
