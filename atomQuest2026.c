@@ -1,3 +1,4 @@
+
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <DHT.h>
@@ -65,14 +66,6 @@ int TURBIDITY_CLEAR_ADC = 0;
 const int TURBIDITY_DIRTY_ADC = 300;
 
 // ==========================================================
-// LOGGING
-// ==========================================================
-
-const unsigned long LOG_INTERVAL = 3000;
-
-unsigned long lastLogTime = 0;
-
-// ==========================================================
 // LEVEL VARIABLES
 // ==========================================================
 
@@ -105,6 +98,9 @@ byte bar[8] = {
 
 void setup()
 {
+  // HC-05 communication using Arduino hardware serial
+  // TX = PIN 1, RX = PIN 0
+
   Serial.begin(9600);
 
   dht.begin();
@@ -126,38 +122,32 @@ void setup()
 
   noTone(BUZZER_PIN);
 
-  // ========================================================
-  // LCD INITIALIZATION - 16x4
-  // ========================================================
+  // LCD INITIALIZATION
 
   lcd.init();
   lcd.backlight();
 
-  // ========================================================
   // WELCOME SCREEN
-  // ========================================================
 
   lcd.setCursor(2, 0);
   lcd.print("Welcome");
- delay(500);
- lcd.print(".");
- delay(500);
- lcd.print(".");
- delay(500);
- lcd.print(".");
- delay(500);
- lcd.print(".");
- delay(500);
- lcd.print(".");
- delay(500);
- lcd.print(".");
+
+  for (int i = 0; i < 6; i++)
+  {
+    delay(500);
+    lcd.print(".");
+  }
+
   delay(2500);
   lcd.clear();
-lcd.print("Team Aquenza");
-lcd.setCursor(1,1);
-lcd.print("Presents....");
-delay(2500);
-lcd.clear();
+
+  lcd.print("Team Aquenza");
+  lcd.setCursor(1, 1);
+  lcd.print("Presents....");
+
+  delay(2500);
+  lcd.clear();
+
   lcd.setCursor(1, 0);
   lcd.print("Water Quality");
 
@@ -167,34 +157,24 @@ lcd.clear();
   delay(2500);
   lcd.clear();
 
-  // ========================================================
   // ACTIVATION SCREEN
-  // ========================================================
 
   lcd.setCursor(3, 0);
   lcd.print("Activating");
 
   lcd.setCursor(0, 1);
   lcd.print("Please Wait");
-delay(500);
- lcd.print(".");
- delay(500);
- delay(500);
- lcd.print(".");
- delay(500);
- delay(500);
- lcd.print(".");
- delay(500);
-  lcd.print(".");
- delay(500);
-  lcd.print(".");
- delay(500);
- delay(1000);
- lcd.clear();
 
-  // ========================================================
+  for (int i = 0; i < 5; i++)
+  {
+    delay(500);
+    lcd.print(".");
+  }
+
+  delay(1000);
+  lcd.clear();
+
   // INITIALIZATION SCREEN
-  // ========================================================
 
   lcd.createChar(0, bar);
 
@@ -254,32 +234,6 @@ delay(500);
   TURBIDITY_CLEAR_ADC = turbidityTotal / 100;
 
   // ========================================================
-  // SERIAL INFORMATION
-  // ========================================================
-
-  Serial.println();
-  Serial.println("========================================");
-  Serial.println("       WATER QUALITY SYSTEM");
-  Serial.println("========================================");
-
-  Serial.print("EMPTY distance : ");
-  Serial.print(EMPTY_DISTANCE);
-  Serial.println(" cm");
-
-  Serial.print("FULL distance  : ");
-  Serial.print(FULL_DISTANCE);
-  Serial.println(" cm");
-
-  Serial.print("pH reference   : ");
-  Serial.print(PH7_VOLTAGE, 3);
-  Serial.println(" V");
-
-  Serial.print("TUR clear ADC  : ");
-  Serial.println(TURBIDITY_CLEAR_ADC);
-
-  Serial.println("----------------------------------------");
-
-  // ========================================================
   // CALIBRATION COMPLETED SCREEN
   // ========================================================
 
@@ -321,19 +275,16 @@ void loop()
 
   if (isnan(tmp) || isnan(hum))
   {
-    Serial.println("DHT11 Sensor Error!");
-
     lcd.setCursor(0, 0);
     lcd.print("DHT11 ERROR     ");
 
     lcd.setCursor(0, 1);
     lcd.print("Check Sensor    ");
 
+    Serial.println("{\"sensor_error\":\"DHT11\"}");
+
     return;
   }
-
-  Serial.print("Temp :");
-  Serial.println(tmp);
 
   // ========================================================
   // ULTRASONIC DISTANCE
@@ -453,10 +404,10 @@ void loop()
   }
 
   // ========================================================
-  // 16x4 LCD SENSOR DISPLAY
+  // LCD DISPLAY
   // ========================================================
 
-  // ROW 1: TDS + TURBIDITY
+  // ROW 1
 
   lcd.setCursor(0, 0);
 
@@ -467,7 +418,7 @@ void loop()
   lcd.print((int)TUR_PERCENT);
   lcd.print("%  ");
 
-  // ROW 2: pH + TEMPERATURE
+  // ROW 2
 
   lcd.setCursor(0, 1);
 
@@ -478,7 +429,7 @@ void loop()
   lcd.print(tmp);
   lcd.print("C");
 
-  // ROW 3: LEVEL + VOLUME
+  // ROW 3
 
   int displayLevel = (int)levelPercent - 30;
 
@@ -492,7 +443,7 @@ void loop()
   lcd.print(currentVolume);
   lcd.print("ml  ");
 
-  // ROW 4: HUMIDITY + WATER STATUS
+  // ROW 4
 
   lcd.setCursor(0, 3);
 
@@ -510,73 +461,64 @@ void loop()
   }
 
   // ========================================================
-  // SERIAL MONITOR
+  // BLUETOOTH DATA TRANSMISSION
   // ========================================================
 
-  unsigned long currentTime = millis();
+  // Send one JSON packet per reading.
+  // Newline marks the end of each packet.
 
-  if (currentTime - lastLogTime >= LOG_INTERVAL)
+  Serial.print("{");
+
+  Serial.print("\"temperature\":");
+  Serial.print(tmp, 1);
+
+  Serial.print(",\"humidity\":");
+  Serial.print(hum, 1);
+
+  Serial.print(",\"tds\":");
+  Serial.print(TDS);
+
+  Serial.print(",\"turbidity\":");
+  Serial.print(TUR_PERCENT, 1);
+
+  Serial.print(",\"ph\":");
+  Serial.print(pH, 2);
+
+  Serial.print(",\"level\":");
+  Serial.print(levelPercent, 1);
+
+  Serial.print(",\"display_level\":");
+  Serial.print(displayLevel);
+
+  Serial.print(",\"volume\":");
+  Serial.print(currentVolume);
+
+  Serial.print(",\"distance\":");
+  Serial.print(distance, 2);
+
+  Serial.print(",\"water_status\":\"");
+
+  if (waterSuitable)
   {
-    Serial.println();
-    Serial.println("----------------------------------------");
-
-    Serial.print("Temperature = ");
-    Serial.print(tmp);
-    Serial.println(" C");
-
-    Serial.print("Humidity    = ");
-    Serial.print(hum);
-    Serial.println(" %");
-
-    Serial.print("Distance = ");
-    Serial.print(distance, 2);
-    Serial.println(" cm");
-
-    Serial.print("LEVEL    = ");
-    Serial.print(levelPercent, 1);
-    Serial.println("%");
-
-    Serial.print("DISPLAY LEVEL = ");
-    Serial.print(displayLevel);
-    Serial.println("%");
-
-    Serial.print("VOLUME   = ");
-    Serial.print(currentVolume);
-    Serial.println(" ml");
-
-    Serial.print("TDS      = ");
-    Serial.print(TDS);
-    Serial.println(" ppm");
-
-    Serial.print("TUR      = ");
-    Serial.print(TUR_PERCENT, 1);
-    Serial.println("%");
-
-    Serial.print("TUR ADC  = ");
-    Serial.println(turbidityValue);
-
-    Serial.print("pH       = ");
-    Serial.println(pH, 2);
-
-    Serial.print("pH Volt  = ");
-    Serial.print(phVoltage, 3);
-    Serial.println(" V");
-
-    Serial.print("WATER    = ");
-
-    if (waterSuitable)
-    {
-      Serial.println("SUITABLE");
-    }
-    else
-    {
-      Serial.println("UNSUITABLE");
-    }
-
-    Serial.println("----------------------------------------");
-
-    lastLogTime = currentTime;
+    Serial.print("GOOD");
   }
+  else
+  {
+    Serial.print("BAD");
+  }
+
+  Serial.print("\"");
+
+  Serial.print(",\"ph_status\":");
+  Serial.print(phSuitable ? "true" : "false");
+
+  Serial.print(",\"tds_status\":");
+  Serial.print(tdsSuitable ? "true" : "false");
+
+  Serial.print(",\"turbidity_status\":");
+  Serial.print(turbiditySuitable ? "true" : "false");
+
+  Serial.println("}");
 
   delay(300);
 }
@@ -688,3 +630,4 @@ float filterDistance(float newDistance)
 
   return sum / 5.0;
 }
+
