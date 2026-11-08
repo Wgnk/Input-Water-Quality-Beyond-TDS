@@ -1,12 +1,14 @@
 # 💧 Smart Water Purification and Quality Monitoring System
 
-A low-cost, Arduino-based water quality monitoring and screening prototype developed to address the limitations of conventional water quality assessment methods that primarily focus on Total Dissolved Solids (TDS). The project focuses on monitoring multiple water quality parameters, including TDS, pH, turbidity, and temperature, to provide a broader understanding of input water quality.
+A low-cost, Arduino-based water quality monitoring and screening prototype developed to address the limitations of conventional water quality assessment methods that primarily focus on Total Dissolved Solids (TDS). The project monitors multiple water quality parameters, including TDS, pH, turbidity, temperature, and water level, to provide a broader understanding of input water quality.
 
 Designed for the Water Purifier track of **Atomberg AtomQuest 2026**, the system aims to support water quality assessment, particularly in rural and mining-affected areas where water contamination can be a significant concern.
 
-The prototype integrates multiple sensors with an Arduino Uno for data acquisition and processing, while an ESP32 handles wireless communication and cloud-based monitoring. Sensor readings are displayed locally through an I2C LCD and remotely through a Blynk IoT dashboard. Visual and audible alerts indicate whether the measured parameters fall within the configured screening limits.
+The prototype integrates multiple sensors with an **Arduino Uno** for data acquisition and processing. An **HC-05 Bluetooth module** enables wireless serial communication between the Arduino Uno and the monitoring interface. Sensor readings are displayed locally through an I2C LCD and remotely through a **custom-developed AQUENZA web dashboard**.
 
-# 🚀 Project Overview :-
+The custom dashboard provides live sensor monitoring, graphical data visualization, water quality status analysis, historical readings, and event notifications. Visual and audible alerts indicate whether the measured parameters fall within the configured screening limits.
+
+# 🚀 Project Overview
 
 Conventional water quality monitoring systems often emphasize TDS as a primary indicator of water quality. However, TDS alone cannot provide a complete picture of water suitability. Water may have acceptable TDS levels while exhibiting abnormal pH or turbidity.
 
@@ -15,16 +17,18 @@ To address this limitation, the proposed system monitors multiple parameters sim
 1. **TDS Monitoring:** Measures the approximate concentration of dissolved solids in water.
 2. **pH Monitoring:** Evaluates whether the water is acidic, neutral, or alkaline.
 3. **Turbidity Monitoring:** Estimates the cloudiness of water caused by suspended particles.
-4. **Temperature Monitoring:** Measures the temperature of the surrounding water sample.
+4. **Temperature Monitoring:** Measures the temperature of the water sample.
 5. **Water Level Monitoring:** Measures the water level and estimates the available volume inside the container using an ultrasonic sensor.
 
-The Arduino Uno acts as the primary controller, collecting sensor readings, processing the measurements, checking configured water quality limits, and controlling the LCD, LEDs, and buzzer.
+The Arduino Uno acts as the primary controller, collecting sensor readings, processing measurements, checking configured water quality limits, and controlling the LCD, LEDs, and buzzer.
 
-An ESP32 is connected to the Arduino Uno through UART serial communication. It receives the processed sensor values and transfers them through Wi-Fi to a Blynk IoT dashboard, where users can monitor the parameters using individual gauge widgets.
+An HC-05 Bluetooth module is interfaced with the Arduino Uno through UART serial communication. It transmits the processed sensor readings wirelessly to the monitoring interface, eliminating the requirement for Wi-Fi connectivity in the sensor communication system.
+
+The received readings are presented through the custom AQUENZA web dashboard, providing a centralized interface for monitoring sensor parameters, viewing historical trends, and observing water quality alerts.
 
 The system is designed as an affordable and expandable monitoring platform that can support better awareness of input water quality before and during purification.
 
-# ✨ Key Features :- 
+# ✨ Key Features
 
 1. **Multi-Parameter Water Quality Monitoring:** Monitors TDS, pH, turbidity, and temperature instead of relying exclusively on TDS.
 
@@ -42,17 +46,27 @@ The system is designed as an affordable and expandable monitoring platform that 
 
 8. **Real-Time LCD Display:** Displays sensor readings and water quality status on a 16×4 I2C LCD.
 
-9. **Wi-Fi-Based Monitoring:** Uses an ESP32 to transfer sensor readings to the Blynk IoT platform.
+9. **Bluetooth-Based Wireless Communication:** Uses the HC-05 Bluetooth module to transfer processed sensor readings from the Arduino Uno to the monitoring interface.
 
-10. **Blynk Gauge Dashboard:** Displays TDS, pH, turbidity, temperature, and water level through five individual gauge widgets.
+10. **Custom AQUENZA Web Dashboard:** Provides a dedicated web-based monitoring interface instead of relying on third-party IoT platforms.
 
-11. **Visual Alert System:** Uses red and green LEDs to indicate whether the measured water parameters satisfy the configured screening conditions.
+11. **Live Sensor Monitoring:** Displays TDS, pH, turbidity, temperature, and water level readings through individual dashboard components.
 
-12. **Audible Alert System:** Activates a buzzer when one or more measured parameters fall outside the configured limits.
+12. **360° Water Quality Status Indicator:** Provides a circular water quality score visualization to represent the overall screening result.
 
-13. **Separate Processing and Connectivity:** Uses Arduino Uno for sensor acquisition and processing, while the ESP32 handles wireless data communication and remote monitoring.
+13. **Horizontal Water Level Indicator:** Displays the available water level through a horizontal progress bar instead of a conventional gauge.
 
-# 🛠️ Hardware Components :-
+14. **Historical Data Visualization:** Provides graphical representations of sensor readings to observe changes over time.
+
+15. **Event and Alert Monitoring:** Displays system events, water quality alerts, and monitoring status.
+
+16. **Visual Alert System:** Uses red and green LEDs to indicate whether the measured water parameters satisfy the configured screening conditions.
+
+17. **Audible Alert System:** Activates a buzzer when one or more measured parameters fall outside the configured limits.
+
+18. **Standalone Processing:** Performs sensor acquisition, calculations, screening, and alert generation locally using the Arduino Uno without requiring an internet connection for the core monitoring operation.
+
+# 🛠️ Hardware Components
 
 The prototype uses the following electronic components:
 
@@ -60,15 +74,15 @@ The prototype uses the following electronic components:
 
 2. **TDS Sensor:** Measures the electrical response associated with dissolved substances in water and provides an approximate TDS reading.
 
-3. **pH Sensor Module:** Measures the pH level of the water sample to identify acidic or alkaline conditions.
+3. **pH Sensor Module:** Measures the pH of the water sample to identify acidic or alkaline conditions.
 
 4. **Turbidity Sensor:** Detects changes in the optical properties of water and estimates its turbidity.
 
-5. **DHT11 Sensor:** Measures temperature and humidity. Temperature is included in the water monitoring dashboard; humidity is an additional environmental reading.
+5. **DHT11 Sensor:** Measures temperature and humidity. Temperature is included in the primary monitoring dashboard; humidity is an additional environmental reading.
 
 6. **HC-SR04 Ultrasonic Sensor:** Measures the distance between the sensor and the water surface for water-level estimation.
 
-7. **ESP32 Development Board:** Receives processed sensor values from the Arduino Uno through UART communication and sends the data to the Blynk IoT platform using Wi-Fi.
+7. **HC-05 Bluetooth Module:** Establishes wireless serial communication between the Arduino Uno and the monitoring interface, transmitting processed sensor values.
 
 8. **16×4 I2C LCD Display:** Displays TDS, turbidity, pH, temperature, water level, volume, humidity, and the configured water quality status.
 
@@ -78,33 +92,41 @@ The prototype uses the following electronic components:
 
 11. **Buzzer:** Provides an audible alert when the measured water quality parameters do not satisfy the programmed conditions.
 
-12. **Resistors:** Used for electrical interfacing, including voltage-level reduction during Arduino-to-ESP32 serial communication.
+12. **Resistors:** Used for electrical interfacing, including voltage-level reduction where required.
 
 13. **Breadboard and Jumper Wires:** Used for circuit prototyping and component connections.
 
-14. **Power Supply and USB Cables:** Provide power and support programming and testing of the microcontroller boards.
+14. **Power Supply and USB Cable:** Provide power and support programming and testing of the microcontroller.
 
-# 💻 Software and Technologies :-
+# 💻 Software and Technologies
 
-1. **Arduino IDE:** Used for writing, compiling, and uploading firmware to Arduino Uno and ESP32.
+1. **Arduino IDE:** Used for writing, compiling, and uploading firmware to Arduino Uno.
 
 2. **Embedded C/C++:** Used to develop sensor-reading routines, calibration logic, water-level calculations, alert conditions, and serial communication.
 
-3. **Arduino Libraries:** Used for interfacing with the LCD, DHT11 sensor, and serial communication modules.
+3. **Arduino Libraries:** Used for interfacing with the LCD and DHT11 sensor.
 
 4. **I2C Communication:** Used for communication between Arduino Uno and the LCD module.
 
-5. **UART Serial Communication:** Transfers processed sensor readings from Arduino Uno to ESP32.
+5. **UART Serial Communication:** Transfers processed sensor readings from Arduino Uno to the HC-05 Bluetooth module.
 
-6. **Wi-Fi Connectivity:** Enables ESP32 to communicate with the Blynk IoT platform.
+6. **HC-05 Bluetooth Communication:** Provides wireless serial data transmission between the hardware prototype and the monitoring interface.
 
-7. **Blynk IoT Platform:** Provides a remote dashboard for monitoring the five primary parameters through individual gauge widgets.
+7. **HTML5:** Used to structure the AQUENZA web dashboard.
 
-8. **Sensor Calibration and Data Processing:** Used to establish reference readings, filter ultrasonic measurements, and calculate the corresponding water quality parameters.
+8. **CSS3:** Used to design the dashboard layout, responsive interface, visual indicators, and monitoring components.
 
-# ⚙️ Working Principle :-
+9. **JavaScript:** Handles incoming sensor data, live dashboard updates, data processing, graphical visualization, and user interactions.
 
-The system operates through sensor data acquisition, calibration, processing, water quality screening, local indication, and wireless monitoring.
+10. **Bluetooth Communication Interface:** Handles the reception and interpretation of serial sensor data, subject to browser or application Bluetooth compatibility.
+
+11. **Chart Visualization:** Displays historical sensor readings through graphical representations.
+
+12. **Sensor Calibration and Data Processing:** Establishes reference readings, filters ultrasonic measurements, and calculates the corresponding water quality parameters.
+
+# ⚙️ Working Principle
+
+The system operates through sensor data acquisition, calibration, processing, water quality screening, local indication, Bluetooth communication, and web-based monitoring.
 
 ### 1. Multi-Sensor Data Acquisition
 
@@ -181,7 +203,7 @@ For the configured 2-litre cylindrical container, the approximate water volume i
 
 **Water Volume (ml) = (Water Level (%) / 100) × 2000**
 
-Multiple ultrasonic readings and a moving-average filter are used to reduce measurement fluctuations.
+Multiple ultrasonic readings and a filtering mechanism are used to reduce measurement fluctuations.
 
 ### 7. Water Quality Screening and Alert System
 
@@ -218,39 +240,57 @@ The display includes:
 
 This allows users to observe the system's measurements without requiring an internet connection.
 
-### 9. Arduino Uno–ESP32 Communication
+### 9. Arduino Uno–HC-05 Bluetooth Communication
 
-The Arduino Uno acts as the master controller, while the ESP32 acts as the receiving and connectivity unit.
+The Arduino Uno acts as the primary controller, while the HC-05 module provides wireless serial connectivity.
 
-The two boards communicate through UART serial communication.
+The HC-05 communicates with the Arduino Uno through UART serial communication.
 
-The Arduino sends the following comma-separated data:
+The Arduino transmits processed sensor readings in a structured, comma-separated format.
 
-**TDS, Turbidity, pH, Temperature, Water Level**
+**Data transmission format:**
 
-The ESP32 receives the data through its UART2 interface and separates the individual sensor values for further processing.
+`TDS,Turbidity,pH,Temperature,WaterLevel`
 
-This arrangement separates the sensor acquisition and processing responsibilities from the wireless communication functionality.
+Example:
 
-### 10. Blynk IoT Dashboard
+`11,0.0,6.95,28.80,20.0`
 
-The ESP32 connects to a Wi-Fi network and transfers the received sensor readings to the Blynk IoT platform.
+The transmitted data is received by the connected Bluetooth-compatible monitoring interface, where JavaScript processes the incoming values and updates the corresponding dashboard components.
 
-The dashboard contains five individual gauge widgets:
+This architecture eliminates the requirement for Wi-Fi connectivity between the hardware and the monitoring interface.
 
-| Parameter | Blynk Virtual Pin |
-|---|---|
-| TDS | V0 |
-| pH | V1 |
-| Turbidity | V2 |
-| Temperature | V3 |
-| Water Level | V4 |
+### 10. Custom AQUENZA Web Dashboard
 
-The dashboard provides a remote view of the measured water quality parameters, allowing users to monitor the system through a smartphone.
+Instead of using the Blynk IoT platform, the project incorporates a custom-developed web dashboard named **AQUENZA – Water Quality Monitoring**.
 
-# 🧩 System Architecture :-
+The dashboard is designed to provide an interactive monitoring experience with a dedicated interface for displaying live sensor readings and historical information.
 
-The system follows a master-controller and wireless-connectivity architecture.
+**Dashboard components include:**
+
+- Live TDS monitoring gauge (ppm).
+- Live pH monitoring gauge.
+- Turbidity percentage gauge.
+- Temperature gauge (°C).
+- Horizontal water-level progress bar (%).
+- Water quality status represented through a full 360° circular indicator.
+- Historical graphs for TDS, pH, turbidity, and temperature.
+- Time-range selection for historical graphs, including 1-hour, 6-hour, and 1-day views.
+- Latest event notifications.
+- System connection and monitoring status.
+- Water quality alerts and parameter status information.
+
+The dashboard receives sensor data through the Bluetooth communication interface and updates the displayed readings as new measurements arrive.
+
+The water-level visualization uses a horizontal bar to make the available water level easier to understand, while the circular water quality indicator provides an overall visual representation of the configured screening result.
+
+Historical graphs help users observe parameter variations over time, while event notifications provide information about changes in monitoring and screening conditions.
+
+The custom dashboard is designed to be responsive so that its interface can adapt to desktop and mobile screen sizes.
+
+# 🧩 System Architecture
+
+The system follows a centralized processing and Bluetooth-based wireless monitoring architecture.
 
 ### Sensor and Processing Unit
 
@@ -264,13 +304,14 @@ The system follows a master-controller and wireless-connectivity architecture.
 
 ↓
 
-**ARDUINO UNO – MASTER CONTROLLER**
+**ARDUINO UNO – PRIMARY CONTROLLER**
 
 - Sensor Data Acquisition
 - Calibration and Processing
 - Water Level and Volume Calculation
 - Water Quality Screening
 - LED and Buzzer Control
+- Serial Data Formatting
 
 ↓
 
@@ -281,7 +322,7 @@ The system follows a master-controller and wireless-connectivity architecture.
 - Green LED
 - Buzzer
 
-### Wireless Communication Unit
+### Bluetooth Communication Unit
 
 **ARDUINO UNO**
 
@@ -291,27 +332,28 @@ UART Serial Communication
 
 ↓
 
-**ESP32 – SLAVE / CONNECTIVITY UNIT**
+**HC-05 BLUETOOTH MODULE**
 
 ↓
 
-Wi-Fi Communication
+Wireless Bluetooth Serial Communication
 
 ↓
 
-**BLYNK IoT CLOUD**
+**CONNECTED MONITORING DEVICE**
 
 ↓
 
-**SMARTPHONE DASHBOARD**
+**AQUENZA – CUSTOM WEB DASHBOARD**
 
-- TDS Gauge
-- pH Gauge
-- Turbidity Gauge
-- Temperature Gauge
-- Water Level Gauge
+- Live Sensor Readings
+- Water Quality Status
+- Horizontal Water Level Indicator
+- Historical Graphs
+- Event Notifications
+- Monitoring Status
 
-# 🔌 Important Pin Configuration :-
+# 🔌 Important Pin Configuration
 
 The following pin assignments correspond to the current Arduino Uno prototype firmware.
 
@@ -327,34 +369,61 @@ The following pin assignments correspond to the current Arduino Uno prototype fi
 | Green LED | D10 |
 | Buzzer | D8 |
 | LCD | I2C (SDA/SCL) |
-| ESP32 Serial TX | D3 (SoftwareSerial) |
+| HC-05 TXD | Arduino RX (D0) |
+| HC-05 RXD | Arduino TX (D1) |
 
-### ESP32 UART2 Configuration
+### HC-05 Bluetooth Connections
 
-| ESP32 Pin | Function |
+| HC-05 Pin | Arduino Uno Connection |
 |---|---|
-| GPIO16 | RX2 – Receives data from Arduino Uno |
-| GPIO17 | TX2 – Not required for the current one-way communication |
+| VCC | 5V (breakout-board dependent) |
+| GND | GND |
+| TXD | RX – D0 |
+| RXD | TX – D1 through a voltage divider |
 
-A voltage divider is used between the Arduino Uno's 5V TX signal and the ESP32's 3.3V RX input. Both boards share a common ground.
+**Important:** The Arduino Uno operates at 5V logic, whereas the HC-05 RX input requires an appropriate lower logic voltage. Use a voltage divider between Arduino TX and HC-05 RX.
 
-# 📱 Blynk Dashboard :-
+The HC-05 TX output can be connected to Arduino RX.
 
-The Blynk dashboard provides a remote monitoring interface for the five primary water quality parameters.
+The hardware UART pins D0 and D1 are shared with USB serial communication. Disconnect the HC-05 TX/RX connections when uploading firmware if they interfere with programming. Alternatively, a SoftwareSerial connection can be used on separate digital pins.
 
-Each parameter is displayed through a dedicated gauge widget.
+# 🌐 AQUENZA Custom Web Dashboard
 
-**Dashboard parameters:**
+The custom AQUENZA dashboard replaces the previously considered Blynk IoT dashboard.
 
-1. TDS – ppm
-2. pH – pH value
-3. Turbidity – %
-4. Temperature – °C
-5. Water Level – %
+It provides a dedicated interface for monitoring the water quality parameters transmitted by the Arduino Uno through the HC-05 Bluetooth module.
 
-The dashboard receives the values processed by the Arduino Uno through the ESP32, allowing users to view the sensor readings remotely over Wi-Fi.
+### Live Monitoring
 
-# 🔬 Applications :-
+Five primary parameters are displayed:
+
+| Parameter | Unit |
+|---|---|
+| TDS | ppm |
+| pH | pH value |
+| Turbidity | % |
+| Temperature | °C |
+| Water Level | % |
+
+### Dashboard Visualizations
+
+1. **Sensor Gauges:** Individual gauges display the latest TDS, pH, turbidity, and temperature readings.
+
+2. **Water Level Bar:** A horizontal progress bar displays the current water level percentage.
+
+3. **360° Water Quality Indicator:** A full circular indicator represents the overall water quality screening score and status.
+
+4. **Historical Graphs:** Graphical trends display changes in TDS, pH, turbidity, and temperature.
+
+5. **Time Filters:** Historical data can be viewed using different time ranges, such as 1 hour, 6 hours, and 1 day.
+
+6. **Events Panel:** Displays recent monitoring events, alerts, and water quality status changes.
+
+7. **Live Connection Indicator:** Displays the connection and monitoring state of the dashboard.
+
+The dashboard is intended to receive real-time sensor values over Bluetooth rather than relying on cloud-based Blynk virtual pins.
+
+# 🔬 Applications
 
 The concepts demonstrated by this project can be extended to several practical applications:
 
@@ -366,13 +435,13 @@ The concepts demonstrated by this project can be extended to several practical a
 
 4. **Water Purification Systems:** Can be integrated with suitable purification units to provide monitoring information about incoming water.
 
-5. **Educational Laboratories:** Demonstrates the practical integration of sensors, microcontrollers, IoT communication, and embedded systems.
+5. **Educational Laboratories:** Demonstrates the practical integration of sensors, microcontrollers, Bluetooth communication, and web technologies.
 
-6. **Remote Water Monitoring:** Enables users to observe sensor readings through an internet-connected dashboard.
+6. **Wireless Water Monitoring:** Enables users to observe sensor readings through a connected monitoring device without requiring Wi-Fi communication from the hardware.
 
 7. **Water Storage Monitoring:** Provides water-level and approximate volume information for storage containers.
 
-# ⚡ Challenges Faced During Development :-
+# ⚡ Challenges Faced During Development
 
 During the development of the prototype, several hardware and software integration challenges were encountered.
 
@@ -380,19 +449,21 @@ During the development of the prototype, several hardware and software integrati
 
 2. **Sensor Calibration:** Establishing reference values for pH and turbidity was important for obtaining meaningful measurements.
 
-3. **Ultrasonic Measurement Stability:** Fluctuations in ultrasonic readings affected water-level calculations. Multiple readings, median selection, and moving-average filtering were incorporated to improve stability.
+3. **Ultrasonic Measurement Stability:** Fluctuations in ultrasonic readings affected water-level calculations. Multiple readings and filtering techniques were incorporated to improve stability.
 
 4. **Water Volume Estimation:** Calibrating the ultrasonic sensor with the cylindrical 2-litre container required appropriate empty and full distance references.
 
 5. **Local Alert Integration:** Coordinating the LEDs and buzzer with the programmed screening conditions required combining multiple sensor readings into a single decision.
 
-6. **Arduino Uno–ESP32 Communication:** Establishing reliable one-way UART communication between the two boards required correct baud-rate configuration, pin connections, common grounding, and voltage-level reduction.
+6. **Bluetooth Communication:** Establishing reliable serial communication between Arduino Uno and HC-05 required correct baud-rate configuration, appropriate pin connections, and voltage-level interfacing.
 
-7. **IoT Dashboard Integration:** Transferring the received sensor values to the Blynk platform required configuring Wi-Fi connectivity, virtual pins, and individual gauge widgets.
+7. **Custom Web Dashboard Integration:** Receiving and interpreting Bluetooth serial data in the web monitoring interface required coordination between hardware communication and JavaScript-based data processing.
 
-8. **Hardware and Software Coordination:** Maintaining consistent sensor updates across the LCD, alert system, serial communication, and remote dashboard required careful firmware integration.
+8. **Live Data Visualization:** Updating sensor indicators, historical graphs, and event notifications consistently required careful handling of incoming sensor values.
 
-# 🔮 Future Scope :-
+9. **Hardware and Software Coordination:** Maintaining consistent sensor updates across the LCD, alert system, Bluetooth communication, and web dashboard required careful firmware integration.
+
+# 🔮 Future Scope
 
 The current prototype provides a foundation for further development. Several improvements can extend its monitoring and purification capabilities:
 
@@ -404,17 +475,19 @@ The current prototype provides a foundation for further development. Several imp
 
 4. **Before-and-After Water Analysis:** Introduce additional sensing points to compare water quality before and after purification.
 
-5. **Advanced IoT Dashboard:** Add historical data logging, parameter trends, notifications, and sensor-health information.
+5. **Advanced Dashboard Analytics:** Add more detailed historical data analysis, parameter comparisons, and downloadable monitoring reports.
 
 6. **Improved Decision-Making:** Develop a more comprehensive water quality assessment mechanism using validated sensor calibration and suitable water quality standards.
 
-7. **Remote Monitoring and Alerts:** Extend the dashboard with notifications when monitored parameters exceed configured limits.
+7. **Advanced Notifications:** Extend the monitoring interface with more detailed alerts when monitored parameters exceed configured limits.
 
 8. **Improved Sensor Accuracy:** Use more reliable sensors and standard calibration procedures to improve measurement consistency.
 
 9. **Power Optimization:** Explore low-power operation and alternative power sources for deployment in remote locations.
 
-# 📌 Important Notes and Limitations :-
+10. **Extended Wireless Monitoring:** Explore additional communication technologies for longer-range monitoring and multi-device connectivity.
+
+# 📌 Important Notes and Limitations
 
 - This project is an educational and prototype-level water quality monitoring and screening system.
 - TDS values in the current firmware are calculated using a simple analog mapping. They should not be treated as laboratory-calibrated TDS measurements.
@@ -424,6 +497,8 @@ The current prototype provides a foundation for further development. Several imp
 - The configured screening limits are prototype conditions and do not establish that water is safe to drink.
 - The system does not replace laboratory testing or certified drinking-water assessment.
 - Physical purification performance should only be claimed after suitable purification hardware has been implemented and validated.
+- Bluetooth communication requires a compatible receiving device and communication interface. Direct browser support for HC-05 Bluetooth Classic serial communication is not universal. A compatible Android application or Bluetooth-to-web communication bridge may be required for the custom web dashboard.
 
-**The primary objective of this project is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water quality beyond TDS.**
+**The primary objective of this project is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water quality beyond TDS, using an Arduino-based embedded system, Bluetooth wireless communication, and a dedicated web monitoring interface.**
+<img width="1672" height="941" alt="AQUENZA Water Quality Dashboard (1)" src="https://github.com/user-attachments/assets/92563af3-5a04-4b7d-b393-104e18c3c97d" />
 <img width="693" height="426" alt="Screenshot 2026-11-08 173621" src="https://github.com/user-attachments/assets/bd883c19-5308-4473-92c3-e5ca25aab91a" />
