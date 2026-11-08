@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AQUENZA | Water Quality Monitoring</title>
+<style>
+:root{--green:#08ae70;--navy:#132747;--muted:#71809a;--line:#e7edf4;--bg:#f4f7fc;--blue:#1681df;--orange:#f39a3c;--purple:#8b35d6;--teal:#0c9eaa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--navy)}
+button{font:inherit;cursor:pointer}.top{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 22px;gap:13px;position:sticky;top:0;z-index:5}
+.brandmark{width:42px;height:42px;border-radius:50%;background:#09ad73;color:white;display:grid;place-items:center;font-weight:900;font-size:27px}.droplet{font-size:30px;color:#0877cb;margin-left:48px}.brand{font-weight:800;font-size:20px;color:#111}.brand span{font-weight:600}.live{background:#dff8ed;color:#079b65;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:700}.topright{margin-left:auto;display:flex;gap:10px}.topright button{border:1px solid #dce4ed;background:#fff;padding:10px 18px;border-radius:9px;color:#40516b}.topright .save{background:var(--green);color:#fff;border-color:var(--green)}
+.tabs{height:48px;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:30px;padding-left:105px;align-items:stretch;overflow:auto}.tab{border:0;background:none;color:#53627b;padding:0 3px;white-space:nowrap}.tab.active{color:#10233e;border-bottom:3px solid var(--green);font-weight:700}
+.layout{display:grid;grid-template-columns: minmax(0,1fr) 288px;gap:12px;padding:14px 18px 22px 96px;max-width:1700px;margin:auto}.main{min-width:0}.banner{height:101px;border-radius:13px;background:linear-gradient(110deg,#d9fff0,#e8f7ff 60%,#a9ddf5);border:1px solid #dceef1;display:flex;align-items:center;padding:16px 28px;overflow:hidden;position:relative}.banner:after{content:"💧 〰️  💦";position:absolute;right:25px;font-size:43px;opacity:.42}.logo-drop{font-size:47px;margin-right:22px}.banner h2{font-size:20px;margin:0 0 5px}.banner p{margin:0;color:#50627a;font-size:14px}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:11px}.card,.panel,.sidebox{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 5px #1a355408}.metric{padding:13px 14px 10px;min-width:0}.metrichead{display:flex;align-items:center;gap:8px;font-weight:750;font-size:15px}.metrichead .unit{margin-left:auto;color:#697992;font-size:12px;font-weight:600}.ico{font-size:20px}.gauge{width:100%;max-width:190px;height:126px;margin:6px auto 0;position:relative}.gauge svg{width:100%;height:100%;overflow:visible}.gauge .value{position:absolute;top:56px;left:0;right:0;text-align:center;font-size:28px;font-weight:800}.gauge .ends{position:absolute;bottom:0;left:5px;right:5px;display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#31415c}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.chartcard{padding:13px 14px 8px;min-height:195px}.charthead{display:flex;align-items:center;font-weight:750;gap:8px;margin-bottom:4px}.charthead .range{margin-left:auto;display:flex;gap:5px}.range button{border:1px solid #e3e9f1;background:#f8faff;border-radius:8px;padding:5px 9px;color:#56657b;font-size:12px}.range button.active{background:var(--green);border-color:var(--green);color:#fff}.chart{width:100%;height:145px;display:block}
+.sidebar{min-width:0}.sidebox{padding:15px;margin-bottom:10px}.sidebox h3{margin:0 0 16px;font-size:19px}.subtle{color:#66758d;margin-bottom:8px}.count{font-size:36px;color:#52627d;margin-top:8px}.eventlist{max-height:460px;overflow:auto}.event{padding:12px 2px;border-bottom:1px solid #edf1f5;font-size:13px;display:grid;grid-template-columns:12px 1fr 22px;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:5px}.event small{display:block;color:#8793a5;margin-bottom:5px}.event strong{font-weight:650}.badge{font-size:15px}
+.rail{position:fixed;left:0;top:66px;bottom:0;width:78px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:15px;padding:16px 8px;z-index:4}.rail button{width:54px;height:48px;border:0;background:transparent;border-radius:11px;font-size:23px;color:#273c59}.rail button.selected{background:#06b879;color:white}.rail .spacer{flex:1}
+.statusbar{display:flex;align-items:center;gap:9px;margin:10px 0;color:#66758d;font-size:13px}.statuslamp{width:9px;height:9px;border-radius:50%;background:#b9c4d2}.statuslamp.on{background:#09b878;box-shadow:0 0 0 4px #dff8ed}.connect{background:#09ae72;color:white;border:0;border-radius:9px;padding:10px 14px;font-weight:700}.disconnect{background:#fff;border:1px solid #dce4ed;color:#53627b;border-radius:9px;padding:10px 14px}.hidden{display:none!important}
+.view{display:none}.view.active{display:block}.sectionpanel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;min-height:360px}.sectionpanel h2{margin-top:0}.historytable{width:100%;border-collapse:collapse;font-size:14px}.historytable th,.historytable td{padding:11px;border-bottom:1px solid var(--line);text-align:left}.historytable th{color:#65748a}.rule{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:10px;margin:9px 0}.rule input{accent-color:var(--green)}
+@media(max-width:1100px){.layout{grid-template-columns:1fr;padding-left:90px}.sidebar{display:grid;grid-template-columns:1fr 2fr;gap:10px}.metrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.top{padding:0 10px}.droplet{margin-left:4px}.brand{font-size:15px}.topright button:not(.save){display:none}.tabs{padding-left:12px;gap:18px}.layout{padding:10px;display:block}.rail{display:none}.metrics{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}.sidebar{display:block}.banner{height:auto;min-height:90px;padding:13px}.banner h2{font-size:16px}.banner:after{display:none}.metric{padding:10px}.gauge{height:115px}.gauge .value{top:51px;font-size:24px}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="brandmark">B</div><div class="droplet">💧</div>
+ <div class="brand">AQUENZA <span>| Water Quality Monitoring</span></div>
+ <div class="live">● Live</div>
+ <div class="topright"><button id="moreBtn">•••</button><button id="cancelBtn">Cancel</button><button class="save" id="saveBtn">Save</button></div>
+</header>
+<nav class="tabs" id="tabs">
+ <button class="tab active" data-view="dashboard">Dashboard</button><button class="tab" data-view="history">History</button><button class="tab" data-view="events">Events</button><button class="tab" data-view="automations">Automations</button><button class="tab" data-view="webdash">Web Dashboard</button><button class="tab" data-view="mobiledash">Mobile Dashboard</button>
+</nav>
+<aside class="rail"><button title="Search">⌕</button><button class="selected" title="Dashboard">▦</button><button title="Analytics">▥</button><button title="Send">➤</button><button title="Notifications">⚑</button><button title="Settings">⚙</button><button title="Configuration">⚙</button><div class="spacer"></div><button title="Help">ⓘ</button></aside>
+<div class="layout">
+<main class="main">
+ <div class="statusbar"><button class="connect" id="connectBtn">Connect HC-05</button><button class="disconnect" id="disconnectBtn" disabled>Disconnect</button><span class="statuslamp" id="lamp"></span><span id="connectionText">Bluetooth serial not connected</span><span style="margin-left:auto">Baud: <b>9600</b></span></div>
+ <section class="view active" id="dashboard">
+  <div class="banner"><div class="logo-drop">💧</div><div><h2>Smart Water Purification and Monitoring System</h2><p>Clean Water&nbsp; • &nbsp;Healthy Life</p></div></div>
+  <div class="metrics" id="metrics"></div>
+  <div class="charts" id="charts"></div>
+ </section>
+ <section class="view" id="history"><div class="sectionpanel"><h2>📊 Sensor History</h2><p class="subtle">Live readings received from Arduino during this browser session.</p><div style="overflow:auto"><table class="historytable"><thead><tr><th>Time</th><th>pH</th><th>Turbidity</th><th>TDS</th><th>Temperature</th><th>Water level</th></tr></thead><tbody id="historyRows"></tbody></table></div><button class="disconnect" id="exportBtn" style="margin-top:14px">Export CSV</button></div></section>
+ <section class="view" id="events"><div class="sectionpanel"><h2>🔔 Events</h2><div id="allEvents"></div></div></section>
+ <section class="view" id="automations"><div class="sectionpanel"><h2>⚡ Automations & Alerts</h2><p class="subtle">Enable browser-side alerts when incoming sensor readings cross these limits.</p>
+  <label class="rule"><input type="checkbox" id="phRule" checked> Alert if pH is outside 6.5–8.5</label>
+  <label class="rule"><input type="checkbox" id="tdsRule" checked> Alert if TDS is above 500 ppm</label>
+  <label class="rule"><input type="checkbox" id="turRule" checked> Alert if turbidity is above 10%</label>
+  <label class="rule"><input type="checkbox" id="levelRule" checked> Alert if water level is below 20%</label>
+  <label class="rule"><input type="checkbox" id="tempRule"> Alert if temperature is above 40 °C</label>
+  <p class="subtle">Alerts are evaluated locally in this page; they do not control a pump or purifier.</p></div></section>
+ <section class="view" id="webdash"><div class="sectionpanel"><h2>🖥 Web Dashboard</h2><p>This is the responsive browser dashboard. Keep this page open while the HC-05 serial connection is active to see live values and charts.</p><div id="webSummary"></div></div></section>
+ <section class="view" id="mobiledash"><div class="sectionpanel"><h2>📱 Mobile Dashboard</h2><p>The dashboard layout automatically adapts to mobile screen sizes. Bluetooth serial access depends on browser and operating-system support; see the connection note below.</p></div></section>
+</main>
+<aside class="sidebar">
+ <div class="sidebox"><h3>♧ Events</h3><div class="subtle">Tiles</div><div style="border:1px solid var(--line);border-radius:10px;padding:13px"><div class="subtle">Event count</div><div class="count" id="eventCount">0</div></div></div>
+ <div class="sidebox"><h3>Latest events</h3><div class="eventlist" id="latestEvents"><p class="subtle">Waiting for Arduino data…</p></div></div>
+ <div class="sidebox"><h3>Bluetooth connection</h3><p class="subtle" style="font-size:13px">HC-05 • Serial Port Profile</p><div id="rxCount" style="font-weight:700">0 packets received</div></div>
+</aside>
+</div>
+<script>
+const specs=[
+ {key:'tds',label:'TDS',unit:'ppm',min:0,max:1000,color:'#1676d2',icon:'💧',digits:0},
+ {key:'ph',label:'pH',unit:'',min:0,max:14,color:'#08ae70',icon:'⚗️',digits:2},
+ {key:'tur',label:'Turbidity',unit:'%',min:0,max:100,color:'#f39a3c',icon:'〰️',digits:0},
+ {key:'temp',label:'Temperature',unit:'°C',min:0,max:80,color:'#8b35d6',icon:'♨️',digits:2},
+ {key:'level',label:'Water Level',unit:'%',min:0,max:100,color:'#0c9eaa',icon:'▣',digits:0}
+];
+let current={tds:0,ph:0,tur:0,temp:0,level:0},samples=[],events=[],packetCount=0,port=null,reader=null,keepReading=false,buffer='';
+const metrics=document.getElementById('metrics'),charts=document.getElementById('charts');
+function gauge(s,v){let pct=Math.max(0,Math.min(1,(Number(v)-s.min)/(s.max-s.min))),circ=251.2,dash=circ*pct;
+return `<div class="card metric"><div class="metrichead"><span class="ico" style="color:${s.color}">${s.icon}</span>${s.label}<span class="unit">${s.unit}</span></div><div class="gauge"><svg viewBox="0 0 190 126"><path d="M 25 105 A 70 70 0 0 1 165 105" fill="none" stroke="#e7edf2" stroke-width="12" stroke-linecap="round"/><path d="M 25 105 A 70 70 0 0 1 165 105" fill="none" stroke="${s.color}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${dash} ${circ}" /></svg><div class="value" style="color:${s.color}">${Number(v).toFixed(s.digits)}${s.key==='level'||s.key==='tur'?'%':''}</div><div class="ends"><span>${s.min}</span><span>${s.max}</span></div></div></div>`}
+function renderMetrics(){metrics.innerHTML=specs.map(s=>gauge(s,current[s.key])).join('')}
+function renderCharts(){charts.innerHTML=specs.filter(s=>s.key!=='level').map(s=>`<div class="card chartcard"><div class="charthead"><span style="color:${s.color};font-size:20px">${s.icon}</span>${s.label} History<div class="range"><button class="active" data-range="1" data-key="${s.key}">1h</button><button data-range="6" data-key="${s.key}">6h</button><button data-range="24" data-key="${s.key}">1d</button></div></div><canvas class="chart" id="chart-${s.key}"></canvas></div>`).join('');charts.querySelectorAll('.range button').forEach(b=>b.onclick=()=>{b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');drawChart(b.dataset.key,Number(b.dataset.range))});}
+function drawChart(key,hours=1){let c=document.getElementById('chart-'+key);if(!c)return;let w=c.clientWidth||500,h=145,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;let x=c.getContext('2d');x.scale(dpr,dpr);let s=specs.find(z=>z.key===key),data=samples.filter(p=>Date.now()-p.ts<=hours*3600000).slice(-80);x.clearRect(0,0,w,h);let L=34,R=9,T=12,B=25,pw=w-L-R,ph=h-T-B;x.font='11px Arial';x.fillStyle='#52627d';x.strokeStyle='#e7edf3';x.lineWidth=1;
+for(let i=0;i<=4;i++){let y=T+ph*i/4;x.beginPath();x.moveTo(L,y);x.lineTo(w-R,y);x.stroke();x.fillText((s.max-s.min*i/4).toFixed(s.digits),2,y+4)}
+for(let i=0;i<5;i++){let xx=L+pw*i/4;x.beginPath();x.moveTo(xx,T);x.lineTo(xx,T+ph);x.stroke();let d=new Date(Date.now()-hours*3600000+hours*3600000*i/4);x.fillText(d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),Math.max(0,xx-19),h-5)}
+if(data.length){x.strokeStyle=s.color;x.lineWidth=2.5;x.beginPath();data.forEach((p,i)=>{let xx=L+(data.length===1?pw:pw*i/(data.length-1)),yy=T+ph*(1-(p[key]-s.min)/(s.max-s.min));if(i===0)x.moveTo(xx,yy);else x.lineTo(xx,yy)});x.stroke();data.forEach((p,i)=>{let xx=L+(data.length===1?pw:pw*i/(data.length-1)),yy=T+ph*(1-(p[key]-s.min)/(s.max-s.min));x.fillStyle=s.color;x.beginPath();x.arc(xx,yy,2.8,0,Math.PI*2);x.fill()})}
+}
+function redraw(){specs.filter(s=>s.key!=='level').forEach(s=>{let b=document.querySelector(`[data-key="${s.key}"].active`);drawChart(s.key,b?Number(b.dataset.range):1)})}
+function addEvent(msg,type='ok'){let e={time:new Date(),msg,type};events.unshift(e);events=events.slice(0,150);document.getElementById('eventCount').textContent=events.length;renderEvents()}
+function renderEvents(){let html=events.slice(0,20).map(e=>`<div class="event"><span class="dot" style="background:${e.type==='warn'?'#f3b51b':e.type==='info'?'#1598d0':'#08ae70'}"></span><div><small>${e.time.toLocaleTimeString()} Today</small><strong>${e.msg}</strong></div><span class="badge">${e.type==='warn'?'⚠️':e.type==='info'?'ℹ️':'✅'}</span></div>`).join('')||'<p class="subtle">No events yet.</p>';document.getElementById('latestEvents').innerHTML=html;document.getElementById('allEvents').innerHTML=html}
+function update(data){let vals={tds:Number(data.tds),ph:Number(data.ph),tur:Number(data.tur??data.turbidity),temp:Number(data.temp??data.temperature),level:Number(data.level??data.waterLevel??data.water_level)};
+if(Object.values(vals).some(v=>!Number.isFinite(v)))return;
+current=vals;let p={...vals,ts:Date.now()};samples.push(p);if(samples.length>3000)samples.shift();packetCount++;document.getElementById('rxCount').textContent=packetCount+' packets received';renderMetrics();redraw();document.getElementById('historyRows').insertAdjacentHTML('afterbegin',`<tr><td>${new Date().toLocaleTimeString()}</td><td>${vals.ph.toFixed(2)}</td><td>${vals.tur.toFixed(1)}%</td><td>${vals.tds.toFixed(0)} ppm</td><td>${vals.temp.toFixed(2)} °C</td><td>${vals.level.toFixed(0)}%</td></tr>`);while(document.getElementById('historyRows').children.length>300)document.getElementById('historyRows').lastElementChild.remove();
+document.getElementById('webSummary').textContent=`Latest: pH ${vals.ph}, Turbidity ${vals.tur}%, TDS ${vals.tds} ppm, Temperature ${vals.temp} °C, Water level ${vals.level}%.`;
+evaluate(vals)}
+let lastAlerts={};
+function evaluate(v){let checks=[['phRule',!(v.ph>=6.5&&v.ph<=8.5),'pH outside safe range'],['tdsRule',v.tds>500,'TDS above 500 ppm'],['turRule',v.tur>10,'Turbidity above 10%'],['levelRule',v.level<20,'Water level low ('+v.level+'%)'],['tempRule',v.temp>40,'Temperature above 40 °C']];checks.forEach(([id,bad,msg])=>{let active=document.getElementById(id).checked;if(active&&bad&&!lastAlerts[id])addEvent(msg,'warn');lastAlerts[id]=active&&bad});}
+function parseLine(line){line=line.trim();if(!line)return;try{let obj=JSON.parse(line);update(obj);return}catch(e){}let a=line.split(/[;,\s]+/).map(Number);if(a.length>=5&&a.slice(0,5).every(Number.isFinite)){// CSV order: pH,turbidity,TDS,temperature,water level
+update({ph:a[0],tur:a[1],tds:a[2],temp:a[3],level:a[4]})}}
+async function connect(){if(!('serial'in navigator)){alert('Web Serial is not available in this browser. Use desktop Chrome or Edge over HTTPS/localhost. Pair HC-05 first and select its Bluetooth COM port. Android Chrome generally cannot read HC-05 Classic Bluetooth SPP directly.');return}
+try{port=await navigator.serial.requestPort();await port.open({baudRate:9600});keepReading=true;document.getElementById('lamp').classList.add('on');document.getElementById('connectionText').textContent='Connected to HC-05 serial port';document.getElementById('connectBtn').disabled=true;document.getElementById('disconnectBtn').disabled=false;addEvent('HC-05 connected','info');const decoder=new TextDecoderStream();port.readable.pipeTo(decoder.writable).catch(()=>{});reader=decoder.readable.getReader();while(keepReading){const {value,done}=await reader.read();if(done)break;buffer+=value;let lines=buffer.split(/\r?\n/);buffer=lines.pop();lines.forEach(parseLine)}}catch(err){if(err.name!=='NotFoundError')alert('Connection error: '+err.message);await disconnect()}}
+async function disconnect(){keepReading=false;try{if(reader){await reader.cancel();reader.releaseLock()}}catch(e){}try{if(port)await port.close()}catch(e){}port=null;reader=null;document.getElementById('lamp').classList.remove('on');document.getElementById('connectionText').textContent='Bluetooth serial not connected';document.getElementById('connectBtn').disabled=false;document.getElementById('disconnectBtn').disabled=true}
+document.getElementById('connectBtn').onclick=connect;document.getElementById('disconnectBtn').onclick=disconnect;
+document.getElementById('tabs').addEventListener('click',e=>{let b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.view));setTimeout(redraw,30)});
+document.getElementById('saveBtn').onclick=()=>{localStorage.setItem('aquenza_alerts',JSON.stringify(['phRule','tdsRule','turRule','levelRule','tempRule'].map(id=>[id,document.getElementById(id).checked])));addEvent('Dashboard settings saved','info');alert('Alert settings saved in this browser.')};
+document.getElementById('cancelBtn').onclick=()=>{['phRule','tdsRule','turRule','levelRule','tempRule'].forEach(id=>document.getElementById(id).checked=true)};
+document.getElementById('moreBtn').onclick=()=>alert('AQUENZA Water Quality Monitoring • HC-05 Bluetooth serial dashboard');
+document.getElementById('exportBtn').onclick=()=>{let rows=[['Time','pH','Turbidity (%)','TDS (ppm)','Temperature (C)','Water Level (%)'],...samples.map(p=>[new Date(p.ts).toISOString(),p.ph,p.tur,p.tds,p.temp,p.level])];let csv=rows.map(r=>r.join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='aquenza-water-history.csv';a.click();URL.revokeObjectURL(a.href)};
+let saved=JSON.parse(localStorage.getItem('aquenza_alerts')||'[]');saved.forEach(([id,v])=>{let el=document.getElementById(id);if(el)el.checked=v});
+renderMetrics();renderCharts();addEvent('Dashboard ready — waiting for Arduino','info');window.addEventListener('resize',redraw);
+</script>
+</body>
+</html>
