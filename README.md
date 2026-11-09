@@ -721,6 +721,6 @@ By combining an Arduino-based embedded monitoring system, Bluetooth wireless com
 Dashboard images: -
 <img width="1354" height="628" alt="Screenshot 2026-11-09 185511" src="https://github.com/user-attachments/assets/269c2a04-4bdd-4020-9cfc-bbe534f1b337" />
 <img width="1672" height="941" alt="AQUENZA Water Quality Dashboard (1)" src="https://github.com/user-attachments/assets/92563af3-5a04-4b7d-b393-104e18c3c97d" />
-
 Circuit Diagram :- 
+
 <img width="693" height="426" alt="Screenshot 2026-11-08 173621" src="https://github.com/user-attachments/assets/bd883c19-5308-4473-92c3-e5ca25aab91a" />
