@@ -1,296 +1,526 @@
-# 💧 Smart Water Purification and Quality Monitoring System
+# 💧 AQUENZA – Smart Water Purification and Quality Monitoring System
 
-A low-cost, Arduino-based water quality monitoring and screening prototype developed to address the limitations of conventional water quality assessment methods that primarily focus on Total Dissolved Solids (TDS). The project monitors multiple water quality parameters, including TDS, pH, turbidity, temperature, and water level, to provide a broader understanding of input water quality.
+**Input-Water Intelligence Beyond TDS**
 
-Designed for the Water Purifier track of **Atomberg AtomQuest 2026**, the system aims to support water quality assessment, particularly in rural and mining-affected areas where water contamination can be a significant concern.
+AQUENZA is a low-cost, Arduino-based multi-parameter water quality monitoring and screening prototype developed for the **Water Purifier Track of Atomberg AtomQuest 2026**.
 
-The prototype integrates multiple sensors with an **Arduino Uno** for data acquisition and processing. An **HC-05 Bluetooth module** enables wireless serial communication between the Arduino Uno and the monitoring interface. Sensor readings are displayed locally through an I2C LCD and remotely through a **custom-developed AQUENZA web dashboard**.
+The project addresses the limitations of conventional water monitoring approaches that primarily focus on Total Dissolved Solids (TDS). Since TDS alone cannot provide a complete picture of water quality, AQUENZA combines multiple sensing parameters, including TDS, pH, turbidity, temperature, and water level, to provide a broader assessment of input water conditions.
 
-The custom dashboard provides live sensor monitoring, graphical data visualization, water quality status analysis, historical readings, and event notifications. Visual and audible alerts indicate whether the measured parameters fall within the configured screening limits.
+The system integrates multiple sensors with an **Arduino Uno**, which performs sensor data acquisition, measurement processing, threshold evaluation, and local alert generation. An **HC-05 Bluetooth module** provides wireless serial communication between the hardware and the monitoring interface.
+
+A major component of the project is **AQUENZA – Custom Web Dashboard**, a dedicated HTML, CSS, and JavaScript-based monitoring platform. It provides live sensor visualization, colour-coded water quality classification, historical data logging, statistical analytics, smart observations, configurable alerts, event monitoring, and downloadable reports.
+
+The platform is designed to make water monitoring more understandable by presenting sensor measurements alongside their trends, screening conditions, and monitoring events.
+
+---
 
 # 🚀 Project Overview
 
-Conventional water quality monitoring systems often emphasize TDS as a primary indicator of water quality. However, TDS alone cannot provide a complete picture of water suitability. Water may have acceptable TDS levels while exhibiting abnormal pH or turbidity.
+Conventional water quality monitoring systems often emphasize TDS as a primary indicator. However, water samples with similar TDS values may have different pH levels and turbidity conditions.
 
-To address this limitation, the proposed system monitors multiple parameters simultaneously:
+AQUENZA addresses this limitation by monitoring multiple parameters simultaneously:
 
-1. **TDS Monitoring:** Measures the approximate concentration of dissolved solids in water.
-2. **pH Monitoring:** Evaluates whether the water is acidic, neutral, or alkaline.
-3. **Turbidity Monitoring:** Estimates the cloudiness of water caused by suspended particles.
-4. **Temperature Monitoring:** Measures the temperature of the water sample.
-5. **Water Level Monitoring:** Measures the water level and estimates the available volume inside the container using an ultrasonic sensor.
+1. **TDS Monitoring:** Estimates the concentration of dissolved substances in water.
+2. **pH Monitoring:** Identifies acidic, neutral, or alkaline conditions.
+3. **Turbidity Monitoring:** Estimates water cloudiness caused by suspended particles.
+4. **Temperature Monitoring:** Measures temperature using a DHT11 sensor.
+5. **Water Level Monitoring:** Measures the water surface distance using an ultrasonic sensor.
+6. **Water Volume Estimation:** Calculates approximate available water volume based on calibrated container dimensions.
 
-The Arduino Uno acts as the primary controller, collecting sensor readings, processing measurements, checking configured water quality limits, and controlling the LCD, LEDs, and buzzer.
+The Arduino Uno processes the sensor readings and controls the LCD, LEDs, and buzzer. The HC-05 transfers the processed readings to the AQUENZA web dashboard.
 
-An HC-05 Bluetooth module is interfaced with the Arduino Uno through UART serial communication. It transmits the processed sensor readings wirelessly to the monitoring interface, eliminating the requirement for Wi-Fi connectivity in the sensor communication system.
+The dashboard converts incoming measurements into meaningful visual information through gauges, status indicators, graphs, statistics, alerts, and historical records.
 
-The received readings are presented through the custom AQUENZA web dashboard, providing a centralized interface for monitoring sensor parameters, viewing historical trends, and observing water quality alerts.
+AQUENZA follows a simple concept:
 
-The system is designed as an affordable and expandable monitoring platform that can support better awareness of input water quality before and during purification.
+**SENSE → PROCESS → ANALYSE → ALERT → MONITOR**
+
+---
 
 # ✨ Key Features
 
-1. **Multi-Parameter Water Quality Monitoring:** Monitors TDS, pH, turbidity, and temperature instead of relying exclusively on TDS.
+## 1. Multi-Parameter Water Quality Monitoring
 
-2. **TDS Measurement:** Provides an approximate TDS reading using the sensor's analog output.
+- Simultaneous monitoring of TDS, pH, turbidity, temperature, and water level.
+- Individual dashboard components for each measured parameter.
+- Configured screening limits for identifying unusual readings.
+- Local processing through Arduino Uno.
 
-3. **pH Monitoring:** Measures the pH of the water sample and checks whether it falls within the configured range.
+## 2. AQUENZA Custom Web Dashboard
 
-4. **Turbidity Monitoring:** Estimates water cloudiness using a turbidity sensor and displays the result as a percentage.
+- Dedicated web-based monitoring interface.
+- Custom-designed dashboard using HTML5, CSS3, and JavaScript.
+- Responsive desktop and mobile layouts.
+- Dedicated navigation sections for Dashboard, History, Smart Analytics, Events, Automations, Web Dashboard, and Mobile Dashboard.
+- Live connection indicator for Bluetooth serial communication.
+- Incoming packet counter to display received sensor-data packets.
 
-5. **Temperature Monitoring:** Measures temperature using a DHT11 sensor.
+## 3. Live Sensor Gauges
 
-6. **Water Level Detection:** Uses an ultrasonic sensor to measure the distance between the sensor and the water surface.
+Individual graphical gauges display the latest readings for:
 
-7. **Water Volume Estimation:** Calculates the approximate water volume based on the measured water level and calibrated container dimensions.
+| Parameter | Display Unit |
+|---|---|
+| TDS | ppm |
+| pH | pH value |
+| Turbidity | % |
+| Temperature | °C |
+| Water Level | % |
 
-8. **Real-Time LCD Display:** Displays sensor readings and water quality status on a 16×4 I2C LCD.
+The gauges update as new sensor readings arrive from the Arduino.
 
-9. **Bluetooth-Based Wireless Communication:** Uses the HC-05 Bluetooth module to transfer processed sensor readings from the Arduino Uno to the monitoring interface.
+## 4. Three-Level Colour-Coded Water Quality Status
 
-10. **Custom AQUENZA Web Dashboard:** Provides a dedicated web-based monitoring interface instead of relying on third-party IoT platforms.
+AQUENZA provides a dedicated water quality status section with a circular monitoring-score visualization and three colour-coded classifications.
 
-11. **Live Sensor Monitoring:** Displays TDS, pH, turbidity, temperature, and water level readings through individual dashboard components.
+- **GREEN – SAFE:** The monitored parameters are within the configured screening limits.
+- **ORANGE – CAUTION:** One or more parameters have crossed a caution threshold and require attention.
+- **RED – DANGER:** One or more parameters have crossed a configured danger threshold.
 
-12. **360° Water Quality Status Indicator:** Provides a circular water quality score visualization to represent the overall screening result.
+The dashboard also displays:
 
-13. **Horizontal Water Level Indicator:** Displays the available water level through a horizontal progress bar instead of a conventional gauge.
+- Current water quality classification.
+- Live monitoring score out of 100.
+- A descriptive status message.
+- Identification of affected parameters.
+- Details explaining why a particular status was assigned.
+- Automatic status updates when new readings are received.
 
-14. **Historical Data Visualization:** Provides graphical representations of sensor readings to observe changes over time.
+The status classification uses configured thresholds for pH, TDS, turbidity, and temperature.
 
-15. **Event and Alert Monitoring:** Displays system events, water quality alerts, and monitoring status.
+**Important:** These are prototype screening classifications. They do not certify that water is safe to drink.
 
-16. **Visual Alert System:** Uses red and green LEDs to indicate whether the measured water parameters satisfy the configured screening conditions.
+## 5. 360° Water Quality Monitoring Score
 
-17. **Audible Alert System:** Activates a buzzer when one or more measured parameters fall outside the configured limits.
+- Circular score visualization representing the current monitoring result.
+- Score displayed on a 0–100 scale.
+- Score updates according to the configured warning and danger conditions.
+- Colour changes according to the current classification.
+- Helps users understand the overall monitoring condition at a glance.
 
-18. **Standalone Processing:** Performs sensor acquisition, calculations, screening, and alert generation locally using the Arduino Uno without requiring an internet connection for the core monitoring operation.
+The score is a programmed monitoring indicator, not a scientifically validated drinking-water quality index.
+
+## 6. Horizontal Water Level Monitoring
+
+- Displays water level using a horizontal progress indicator.
+- Provides a visual representation of available water in the container.
+- Updates with incoming ultrasonic sensor readings.
+- Makes water-level information easier to interpret without relying on another circular gauge.
+
+## 7. Historical Sensor Data Logging
+
+The dashboard maintains a record of incoming sensor readings.
+
+Historical records include:
+
+- Timestamp.
+- pH.
+- Turbidity percentage.
+- TDS in ppm.
+- Temperature in °C.
+- Water level percentage.
+
+Additional capabilities include:
+
+- Automatic insertion of new readings into the history.
+- Locally stored sensor records using browser local storage.
+- Restoration of previously stored readings when the dashboard is reopened.
+- A historical readings table.
+- Export of sensor history as a CSV file.
+- An option to clear stored sensor readings.
+
+The dashboard retains up to 3,000 sensor samples in its local storage dataset.
+
+## 8. Historical Graphs and Trend Visualization
+
+AQUENZA provides graphical representations of sensor readings to help users observe changes over time.
+
+Features include:
+
+- Individual historical graphs for TDS, pH, turbidity, and temperature.
+- Live graph updates when new sensor data arrives.
+- Time-range selection for:
+  - 1 hour
+  - 6 hours
+  - 24 hours
+- Graph scaling and redrawing when the dashboard layout changes.
+- Visual representation of sensor variations over the selected period.
+
+These graphs help identify changes in measured water parameters rather than relying on a single reading.
+
+## 9. AQUENZA Smart Analytics
+
+The Smart Analytics section performs local statistical analysis using the sensor readings received from the Arduino.
+
+It provides four major monitoring indicators:
+
+| Analytics Indicator | Description |
+|---|---|
+| Data Points | Total number of stored sensor samples |
+| Quality Score | Latest configured monitoring score out of 100 |
+| Safe Sample Rate | Percentage of stored samples classified as SAFE |
+| Last Reading | Time and date of the latest recorded sample |
+
+### Parameter Statistics
+
+The dashboard calculates statistical information for all five monitored parameters.
+
+| Parameter | Average | Minimum | Maximum | Latest Trend |
+|---|---|---|---|---|
+| pH | Calculated | Calculated | Calculated | Rising / Falling / Stable |
+| TDS | Calculated | Calculated | Calculated | Rising / Falling / Stable |
+| Turbidity | Calculated | Calculated | Calculated | Rising / Falling / Stable |
+| Temperature | Calculated | Calculated | Calculated | Rising / Falling / Stable |
+| Water Level | Calculated | Calculated | Calculated | Rising / Falling / Stable |
+
+The latest trend is determined by comparing recent readings, using up to the latest five samples.
+
+### Smart Observations
+
+The analytics engine generates observations based on the received sensor data.
+
+Examples include:
+
+- Current water quality classification and monitoring score.
+- pH readings outside the configured target range.
+- TDS readings above the configured caution threshold.
+- Turbidity readings above the configured caution threshold.
+- Temperature readings above the configured caution threshold.
+- The largest parameter change compared with the previous sensor packet.
+- Recent 10-sample average TDS when sufficient readings are available.
+- Informational messages when no configured warning thresholds are crossed.
+
+These observations help users understand which parameters require attention and how readings are changing.
+
+## 10. Configurable Automations and Alerts
+
+The Automations & Alerts section provides configurable browser-side monitoring rules.
+
+Users can enable or disable individual alert conditions:
+
+| Alert Rule | Configured Condition |
+|---|---|
+| pH Alert | pH below 6.5 or above 8.5 |
+| TDS Alert | TDS above 500 ppm |
+| Turbidity Alert | Turbidity above 10% |
+| Water Level Alert | Water level below 20% |
+| Temperature Alert | Temperature above 40 °C |
+
+Additional capabilities:
+
+- Individual checkbox-based alert configuration.
+- Save alert preferences in browser local storage.
+- Restore saved preferences when reopening the dashboard.
+- Generate an event when an enabled condition becomes active.
+- Avoid repeatedly generating the same alert for every incoming packet while that condition remains active.
+- Reset alert selections through the available cancel/reset control.
+
+These rules operate within the web dashboard. They do not automatically control a pump, valve, or purification mechanism.
+
+## 11. Event Monitoring and Notifications
+
+The Events section records important monitoring activities.
+
+Examples include:
+
+- HC-05 connection events.
+- Water quality status changes.
+- Parameter threshold alerts.
+- Saved dashboard settings.
+- Stored sensor history restoration.
+- Dashboard initialization.
+- Local storage warnings.
+- Historical data clearing events.
+
+The event interface includes:
+
+- Event count.
+- Latest event list.
+- Event timestamps.
+- Colour-coded event indicators.
+- Informational, warning, and normal event categories.
+- A separate Events section and a latest-events panel.
+
+The dashboard maintains a limited event history and displays recent events for quick inspection.
+
+## 12. CSV Data Export and Reporting
+
+AQUENZA includes two separate data-export functions.
+
+**Sensor History Export**
+
+Exports recorded sensor readings with:
+
+- Timestamp.
+- pH.
+- Turbidity.
+- TDS.
+- Temperature.
+- Water level.
+
+Generated filename:
+
+`aquenza-water-history.csv`
+
+**Smart Analytics Export**
+
+Exports sensor readings along with calculated monitoring information:
+
+- Timestamp.
+- pH.
+- Turbidity.
+- TDS.
+- Temperature.
+- Water level.
+- Monitoring score.
+- Water quality classification.
+
+Generated filename:
+
+`aquenza-analytics-report.csv`
+
+These files can be opened in spreadsheet applications for further examination and reporting.
+
+## 13. Local Data Storage and Restoration
+
+- Uses browser local storage to preserve sensor history.
+- Restores previously stored readings when the dashboard is reopened.
+- Restores the latest recorded measurements.
+- Restores saved alert preferences.
+- Continues live monitoring if the browser storage becomes full, while generating a warning that new readings could not be saved.
+- Provides an option to clear stored sensor history.
+
+Data is stored locally in the browser rather than automatically uploaded to a cloud server.
+
+## 14. Bluetooth-Based Wireless Communication
+
+- Uses the HC-05 Bluetooth module.
+- UART serial communication between Arduino Uno and HC-05.
+- Configured baud rate of 9600.
+- Wireless serial data transfer to a compatible monitoring device.
+- Live packet reception and parsing by the dashboard.
+- Connect and disconnect controls.
+- Bluetooth connection status indicator.
+
+The dashboard supports structured JSON readings and comma-separated sensor readings.
+
+For comma-separated input, the dashboard parser expects:
+
+`pH,Turbidity,TDS,Temperature,WaterLevel`
+
+Example:
+
+`6.95,0.0,11,28.80,20.0`
+
+The exact format transmitted by the Arduino firmware should match the dashboard parser.
+
+## 15. Responsive Desktop and Mobile Interface
+
+- Responsive dashboard layout.
+- Dedicated Web Dashboard section.
+- Dedicated Mobile Dashboard section.
+- Adaptive layout for different screen sizes.
+- Sensor information and monitoring sections designed for convenient viewing.
+
+---
 
 # 🛠️ Hardware Components
 
-The prototype uses the following electronic components:
+| Component | Purpose |
+|---|---|
+| Arduino Uno | Primary microcontroller for sensor acquisition and processing |
+| TDS Sensor | Estimates dissolved-solids concentration |
+| pH Sensor Module | Measures pH of the water sample |
+| Turbidity Sensor | Estimates water cloudiness |
+| DHT11 Sensor | Measures temperature and humidity |
+| HC-SR04 Ultrasonic Sensor | Measures water surface distance |
+| HC-05 Bluetooth Module | Provides wireless serial communication |
+| 16×4 I2C LCD | Displays local sensor measurements |
+| Red LED | Indicates an alert condition |
+| Green LED | Indicates readings within configured screening limits |
+| Buzzer | Provides audible alerts |
+| Resistors | Used for electrical interfacing and voltage reduction |
+| Breadboard and Jumper Wires | Used for circuit prototyping |
+| USB Cable and Power Supply | Provide power and programming connectivity |
 
-1. **Arduino Uno:** Acts as the primary microcontroller. It collects sensor readings, performs calculations, evaluates configured limits, and controls the display and alert system.
-
-2. **TDS Sensor:** Measures the electrical response associated with dissolved substances in water and provides an approximate TDS reading.
-
-3. **pH Sensor Module:** Measures the pH of the water sample to identify acidic or alkaline conditions.
-
-4. **Turbidity Sensor:** Detects changes in the optical properties of water and estimates its turbidity.
-
-5. **DHT11 Sensor:** Measures temperature and humidity. Temperature is included in the primary monitoring dashboard; humidity is an additional environmental reading.
-
-6. **HC-SR04 Ultrasonic Sensor:** Measures the distance between the sensor and the water surface for water-level estimation.
-
-7. **HC-05 Bluetooth Module:** Establishes wireless serial communication between the Arduino Uno and the monitoring interface, transmitting processed sensor values.
-
-8. **16×4 I2C LCD Display:** Displays TDS, turbidity, pH, temperature, water level, volume, humidity, and the configured water quality status.
-
-9. **Red LED:** Indicates that one or more monitored parameters are outside the configured screening limits.
-
-10. **Green LED:** Indicates that the monitored parameters satisfy the configured screening limits.
-
-11. **Buzzer:** Provides an audible alert when the measured water quality parameters do not satisfy the programmed conditions.
-
-12. **Resistors:** Used for electrical interfacing, including voltage-level reduction where required.
-
-13. **Breadboard and Jumper Wires:** Used for circuit prototyping and component connections.
-
-14. **Power Supply and USB Cable:** Provide power and support programming and testing of the microcontroller.
+---
 
 # 💻 Software and Technologies
 
-1. **Arduino IDE:** Used for writing, compiling, and uploading firmware to Arduino Uno.
+1. **Arduino IDE:** Firmware development, compilation, and uploading.
+2. **Embedded C/C++:** Sensor acquisition, calibration, calculations, and alert logic.
+3. **HTML5:** Structure of the AQUENZA web dashboard.
+4. **CSS3:** Dashboard styling, layouts, responsive design, and visual indicators.
+5. **JavaScript:** Sensor-data processing, dashboard updates, analytics, event generation, and user interactions.
+6. **LiquidCrystal_I2C Library:** LCD interfacing.
+7. **DHT Library:** DHT11 sensor interfacing.
+8. **I2C Communication:** Communication between Arduino Uno and LCD.
+9. **UART Serial Communication:** Data transmission between Arduino Uno and HC-05.
+10. **Web Serial API:** Browser-based serial-port communication where supported.
+11. **Browser Local Storage:** Local persistence of sensor history and alert settings.
+12. **JavaScript Canvas:** Rendering historical sensor graphs.
+13. **CSV Export:** Downloading sensor history and analytics reports.
 
-2. **Embedded C/C++:** Used to develop sensor-reading routines, calibration logic, water-level calculations, alert conditions, and serial communication.
-
-3. **Arduino Libraries:** Used for interfacing with the LCD and DHT11 sensor.
-
-4. **I2C Communication:** Used for communication between Arduino Uno and the LCD module.
-
-5. **UART Serial Communication:** Transfers processed sensor readings from Arduino Uno to the HC-05 Bluetooth module.
-
-6. **HC-05 Bluetooth Communication:** Provides wireless serial data transmission between the hardware prototype and the monitoring interface.
-
-7. **HTML5:** Used to structure the AQUENZA web dashboard.
-
-8. **CSS3:** Used to design the dashboard layout, responsive interface, visual indicators, and monitoring components.
-
-9. **JavaScript:** Handles incoming sensor data, live dashboard updates, data processing, graphical visualization, and user interactions.
-
-10. **Bluetooth Communication Interface:** Handles the reception and interpretation of serial sensor data, subject to browser or application Bluetooth compatibility.
-
-11. **Chart Visualization:** Displays historical sensor readings through graphical representations.
-
-12. **Sensor Calibration and Data Processing:** Establishes reference readings, filters ultrasonic measurements, and calculates the corresponding water quality parameters.
+---
 
 # ⚙️ Working Principle
 
-The system operates through sensor data acquisition, calibration, processing, water quality screening, local indication, Bluetooth communication, and web-based monitoring.
+The system operates through sensor acquisition, data processing, screening, local indication, Bluetooth transmission, and dashboard-based analytics.
 
-### 1. Multi-Sensor Data Acquisition
+## 1. Multi-Sensor Data Acquisition
 
-The sensors continuously provide analog or digital readings to the Arduino Uno.
+The Arduino Uno collects readings from the connected sensors:
 
-- TDS sensor provides an analog reading corresponding to dissolved substances.
-- pH sensor provides an analog voltage used for pH estimation.
-- Turbidity sensor provides an analog reading corresponding to water cloudiness.
+- TDS sensor provides an analog signal.
+- pH sensor provides an analog voltage.
+- Turbidity sensor provides an analog signal.
 - DHT11 provides temperature and humidity readings.
-- Ultrasonic sensor measures the distance between itself and the water surface.
+- HC-SR04 measures the distance between the sensor and water surface.
 
-The Arduino Uno collects these readings and processes them using the programmed logic.
+The Arduino processes the measurements using the programmed firmware.
 
-### 2. TDS Measurement
+## 2. TDS Measurement
 
-The TDS sensor provides an analog output to the Arduino Uno.
+The TDS sensor produces an analog output associated with dissolved substances.
 
-The analog reading is converted into an approximate TDS value using the programmed mapping:
+The current prototype firmware uses an analog conversion or mapping approach to estimate TDS in ppm.
 
-**TDS = map(Analog Reading, 0–1023, 0–1000)**
+The resulting value is used for preliminary screening. It is not a laboratory-calibrated measurement unless validated against a suitable reference.
 
-The resulting value is expressed in parts per million (ppm).
+## 3. pH Measurement
 
-This provides a basic measurement channel for monitoring dissolved solids in the water sample.
+The pH module produces an analog voltage corresponding to the water sample's pH.
 
-### 3. pH Measurement
+The Arduino converts the analog reading into voltage and applies the programmed calibration logic to estimate pH.
 
-The pH sensor module provides an analog voltage corresponding to the water sample's pH.
+The configured target range is 6.5–8.5.
 
-The Arduino reads the analog signal and converts it into voltage. A reference voltage is established during the startup calibration routine.
-
-The calculated pH value is then compared with the configured acceptable screening range of 6.5–8.5.
-
-### 4. Turbidity Measurement
+## 4. Turbidity Measurement
 
 The turbidity sensor detects changes in the optical properties of water.
 
-The Arduino reads its analog output and compares it against the calibrated clear-water reference and configured dirty-water reference.
+The Arduino processes the analog output using the programmed reference values and converts it into a percentage between 0% and 100%.
 
-The resulting reading is converted into a turbidity percentage between 0% and 100%.
+The percentage represents the prototype's calibrated turbidity indication, not a direct NTU measurement.
 
-This provides an indication of changes in water clarity and suspended-particle conditions.
+## 5. Temperature Monitoring
 
-### 5. Temperature Monitoring
+The DHT11 measures temperature and humidity.
 
-The DHT11 sensor measures temperature and humidity.
+Temperature is included in the dashboard's monitoring and analytics system.
 
-The Arduino processes these readings, and temperature is included in the primary monitoring dashboard.
+The DHT11 is an ambient temperature and humidity sensor; it should not be treated as a waterproof water-temperature probe.
 
-Temperature provides additional information about the water sample and its surrounding measurement conditions.
+## 6. Water Level and Volume Estimation
 
-### 6. Ultrasonic Water Level and Volume Measurement
+The HC-SR04 ultrasonic sensor measures the distance between the sensor and the water surface.
 
-The HC-SR04 ultrasonic sensor is positioned above the water container.
-
-It measures the time taken for an ultrasonic pulse to travel to the water surface and return.
-
-The distance is calculated using:
+Distance is calculated using:
 
 **Distance = (Time × Speed of Sound) / 2**
 
-The measured distance is compared with the calibrated empty and full distances:
+The current calibration references are:
 
-- Empty container reference: 15.40 cm
-- Full container reference: 3.58 cm
+- Empty container distance: 15.40 cm
+- Full container distance: 3.58 cm
 
-The Arduino calculates the water level percentage using:
+Water level is calculated using:
 
 **Water Level (%) = [(Empty Distance − Measured Distance) / (Empty Distance − Full Distance)] × 100**
 
-The calculated percentage is constrained between 0% and 100%.
+The result is constrained between 0% and 100%.
 
-For the configured 2-litre cylindrical container, the approximate water volume is calculated as:
+For the configured 2-litre container:
 
 **Water Volume (ml) = (Water Level (%) / 100) × 2000**
 
-Multiple ultrasonic readings and a filtering mechanism are used to reduce measurement fluctuations.
+This is an approximate estimate based on the calibrated container geometry.
 
-### 7. Water Quality Screening and Alert System
+## 7. Water Quality Screening
 
-After processing the sensor readings, the Arduino compares the measured values with the programmed screening limits.
+The Arduino evaluates the configured screening conditions.
 
-The current prototype uses the following conditions:
-
-| Parameter | Configured screening condition |
+| Parameter | Prototype Screening Condition |
 |---|---|
 | pH | 6.5–8.5 |
 | TDS | ≤ 500 ppm |
 | Turbidity | ≤ 10% |
 
-If all three conditions are satisfied, the system indicates a suitable screening result using the green LED.
+If all three conditions are satisfied, the hardware indicates the configured in-range condition using the green LED.
 
-If any of the conditions are violated, the red LED and buzzer are activated to indicate an alert.
+If one or more conditions are violated, the red LED and buzzer indicate an alert.
 
-The system therefore provides a simple multi-parameter screening mechanism rather than relying on TDS alone.
+The dashboard independently evaluates received pH, TDS, turbidity, and temperature values using its three-level classification logic.
 
-### 8. LCD-Based Monitoring
+### Dashboard Classification Thresholds
 
-The 16×4 I2C LCD displays the processed sensor readings locally.
+| Parameter | SAFE | CAUTION | DANGER |
+|---|---|---|---|
+| pH | 6.5–8.5 | 6.0–6.5 or 8.5–9.0 | Below 6.0 or above 9.0 |
+| TDS | ≤ 500 ppm | Above 500 to 600 ppm | Above 600 ppm |
+| Turbidity | ≤ 10% | Above 10% to 20% | Above 20% |
+| Temperature | ≤ 40 °C | Above 40 °C to 45 °C | Above 45 °C |
 
-The display includes:
+The dashboard's water-level and temperature alert rules are configurable separately. A water level below 20% generates an alert when its rule is enabled.
 
-- TDS value
-- Turbidity percentage
-- pH value
-- Temperature
-- Water level
-- Estimated water volume
-- Humidity
-- Water quality screening status
+## 8. Monitoring Score Calculation
 
-This allows users to observe the system's measurements without requiring an internet connection.
+The dashboard calculates a configured monitoring score.
 
-### 9. Arduino Uno–HC-05 Bluetooth Communication
+- Starts at 100.
+- Deducts 10 points for each caution condition.
+- Deducts 25 points for each danger condition.
+- The final score cannot fall below zero.
 
-The Arduino Uno acts as the primary controller, while the HC-05 module provides wireless serial connectivity.
+The score is intended to summarize the dashboard's programmed screening conditions. It is not a certified water-quality index.
 
-The HC-05 communicates with the Arduino Uno through UART serial communication.
+## 9. LCD-Based Monitoring
 
-The Arduino transmits processed sensor readings in a structured, comma-separated format.
+The 16×4 I2C LCD displays locally processed sensor information.
 
-**Data transmission format:**
+Depending on the firmware display layout, it can present:
 
-`TDS,Turbidity,pH,Temperature,WaterLevel`
+- TDS.
+- Turbidity.
+- pH.
+- Temperature.
+- Humidity.
+- Water level.
+- Estimated volume.
+- Water quality status.
 
-Example:
+The local display operates independently of the web dashboard.
 
-`11,0.0,6.95,28.80,20.0`
+## 10. Arduino Uno–HC-05 Communication
 
-The transmitted data is received by the connected Bluetooth-compatible monitoring interface, where JavaScript processes the incoming values and updates the corresponding dashboard components.
+The Arduino Uno sends processed sensor readings through UART serial communication.
 
-This architecture eliminates the requirement for Wi-Fi connectivity between the hardware and the monitoring interface.
+The HC-05 transfers these readings wirelessly to a compatible monitoring device.
 
-### 10. Custom AQUENZA Web Dashboard
+The web dashboard receives serial data at 9600 baud and processes incoming readings to update the interface.
 
-Instead of using the Blynk IoT platform, the project incorporates a custom-developed web dashboard named **AQUENZA – Water Quality Monitoring**.
+## 11. Dashboard Processing and Analytics
 
-The dashboard is designed to provide an interactive monitoring experience with a dedicated interface for displaying live sensor readings and historical information.
+After receiving a valid sensor packet, the dashboard:
 
-**Dashboard components include:**
+1. Parses the incoming data.
+2. Updates the live sensor gauges.
+3. Updates historical graphs.
+4. Adds a timestamped sensor record.
+5. Stores readings locally where browser storage is available.
+6. Evaluates the current water quality classification.
+7. Updates the circular monitoring score.
+8. Generates smart observations.
+9. Evaluates enabled alert rules.
+10. Records relevant monitoring events.
 
-- Live TDS monitoring gauge (ppm).
-- Live pH monitoring gauge.
-- Turbidity percentage gauge.
-- Temperature gauge (°C).
-- Horizontal water-level progress bar (%).
-- Water quality status represented through a full 360° circular indicator.
-- Historical graphs for TDS, pH, turbidity, and temperature.
-- Time-range selection for historical graphs, including 1-hour, 6-hour, and 1-day views.
-- Latest event notifications.
-- System connection and monitoring status.
-- Water quality alerts and parameter status information.
+This provides a combined live monitoring and historical analysis experience.
 
-The dashboard receives sensor data through the Bluetooth communication interface and updates the displayed readings as new measurements arrive.
-
-The water-level visualization uses a horizontal bar to make the available water level easier to understand, while the circular water quality indicator provides an overall visual representation of the configured screening result.
-
-Historical graphs help users observe parameter variations over time, while event notifications provide information about changes in monitoring and screening conditions.
-
-The custom dashboard is designed to be responsive so that its interface can adapt to desktop and mobile screen sizes.
+---
 
 # 🧩 System Architecture
 
-The system follows a centralized processing and Bluetooth-based wireless monitoring architecture.
+AQUENZA follows a centralized embedded-processing architecture with Bluetooth-based wireless monitoring.
 
 ### Sensor and Processing Unit
 
@@ -309,7 +539,7 @@ The system follows a centralized processing and Bluetooth-based wireless monitor
 - Sensor Data Acquisition
 - Calibration and Processing
 - Water Level and Volume Calculation
-- Water Quality Screening
+- Screening Threshold Evaluation
 - LED and Buzzer Control
 - Serial Data Formatting
 
@@ -322,7 +552,7 @@ The system follows a centralized processing and Bluetooth-based wireless monitor
 - Green LED
 - Buzzer
 
-### Bluetooth Communication Unit
+### Wireless Monitoring Unit
 
 **ARDUINO UNO**
 
@@ -340,22 +570,31 @@ Wireless Bluetooth Serial Communication
 
 ↓
 
-**CONNECTED MONITORING DEVICE**
+**COMPATIBLE MONITORING DEVICE**
 
 ↓
 
 **AQUENZA – CUSTOM WEB DASHBOARD**
 
-- Live Sensor Readings
-- Water Quality Status
+- Live Sensor Gauges
+- Three-Level Water Status
+- 360° Monitoring Score
 - Horizontal Water Level Indicator
 - Historical Graphs
-- Event Notifications
-- Monitoring Status
+- Sensor History
+- Smart Analytics
+- Parameter Statistics
+- Smart Observations
+- Events and Notifications
+- Configurable Automations and Alerts
+- CSV Data Export
+- Local Data Storage
+
+---
 
 # 🔌 Important Pin Configuration
 
-The following pin assignments correspond to the current Arduino Uno prototype firmware.
+The following assignments correspond to the current Arduino Uno prototype firmware.
 
 | Component | Arduino Uno Pin |
 |---|---|
@@ -368,137 +607,120 @@ The following pin assignments correspond to the current Arduino Uno prototype fi
 | Red LED | D11 |
 | Green LED | D10 |
 | Buzzer | D8 |
-| LCD | I2C (SDA/SCL) |
-| HC-05 TXD | Arduino RX (D0) |
-| HC-05 RXD | Arduino TX (D1) |
+| LCD | I2C SDA/SCL |
+| HC-05 TXD | D0 / RX |
+| HC-05 RXD | D1 / TX through voltage divider |
 
-### HC-05 Bluetooth Connections
+### HC-05 Connections
 
 | HC-05 Pin | Arduino Uno Connection |
 |---|---|
-| VCC | 5V (breakout-board dependent) |
+| VCC | 5V, depending on breakout-board specifications |
 | GND | GND |
-| TXD | RX – D0 |
-| RXD | TX – D1 through a voltage divider |
+| TXD | Arduino RX – D0 |
+| RXD | Arduino TX – D1 through a voltage divider |
 
-**Important:** The Arduino Uno operates at 5V logic, whereas the HC-05 RX input requires an appropriate lower logic voltage. Use a voltage divider between Arduino TX and HC-05 RX.
+**Important:** The HC-05 RX input requires suitable logic-level interfacing. Use a voltage divider between Arduino TX and HC-05 RX.
 
-The HC-05 TX output can be connected to Arduino RX.
+The hardware UART pins D0 and D1 are shared with USB serial communication. Disconnect the HC-05 serial connections during firmware uploading if they interfere with programming.
 
-The hardware UART pins D0 and D1 are shared with USB serial communication. Disconnect the HC-05 TX/RX connections when uploading firmware if they interfere with programming. Alternatively, a SoftwareSerial connection can be used on separate digital pins.
+---
 
-# 🌐 AQUENZA Custom Web Dashboard
+# 🌐 AQUENZA Dashboard Modules
 
-The custom AQUENZA dashboard replaces the previously considered Blynk IoT dashboard.
+The web dashboard is organized into dedicated sections.
 
-It provides a dedicated interface for monitoring the water quality parameters transmitted by the Arduino Uno through the HC-05 Bluetooth module.
-
-### Live Monitoring
-
-Five primary parameters are displayed:
-
-| Parameter | Unit |
+| Dashboard Section | Main Functionality |
 |---|---|
-| TDS | ppm |
-| pH | pH value |
-| Turbidity | % |
-| Temperature | °C |
-| Water Level | % |
+| Dashboard | Live gauges, water status, monitoring score, and graphs |
+| History | Timestamped sensor readings and CSV export |
+| Smart Analytics | KPIs, parameter statistics, trends, and smart observations |
+| Events | Historical monitoring events and alerts |
+| Automations | Configurable browser-side alert rules |
+| Web Dashboard | Information about the browser monitoring interface |
+| Mobile Dashboard | Responsive mobile monitoring interface |
 
-### Dashboard Visualizations
-
-1. **Sensor Gauges:** Individual gauges display the latest TDS, pH, turbidity, and temperature readings.
-
-2. **Water Level Bar:** A horizontal progress bar displays the current water level percentage.
-
-3. **360° Water Quality Indicator:** A full circular indicator represents the overall water quality screening score and status.
-
-4. **Historical Graphs:** Graphical trends display changes in TDS, pH, turbidity, and temperature.
-
-5. **Time Filters:** Historical data can be viewed using different time ranges, such as 1 hour, 6 hours, and 1 day.
-
-6. **Events Panel:** Displays recent monitoring events, alerts, and water quality status changes.
-
-7. **Live Connection Indicator:** Displays the connection and monitoring state of the dashboard.
-
-The dashboard is intended to receive real-time sensor values over Bluetooth rather than relying on cloud-based Blynk virtual pins.
+---
 
 # 🔬 Applications
 
-The concepts demonstrated by this project can be extended to several practical applications:
+1. **Rural Water Monitoring:** Affordable preliminary monitoring of multiple water quality indicators.
+2. **Mining-Affected Areas:** Supports observation of abnormal pH, dissolved-solids, and turbidity readings.
+3. **Input-Water Assessment:** Helps identify unusual readings before water enters a purification process.
+4. **Water Purification Systems:** Can be extended to monitor input and output water conditions.
+5. **Educational Laboratories:** Demonstrates sensor integration, embedded processing, wireless communication, and web technologies.
+6. **Wireless Water Monitoring:** Enables monitoring through a compatible Bluetooth-connected device.
+7. **Water Storage Monitoring:** Provides water-level and approximate volume information.
+8. **Historical Water Analysis:** Helps users observe parameter variations using stored readings and graphical trends.
 
-1. **Rural Water Quality Monitoring:** Provides an affordable platform for monitoring multiple water quality indicators in rural areas.
-
-2. **Mining-Affected Areas:** Supports preliminary monitoring of water samples in regions where mining activities may affect water quality.
-
-3. **Input Water Assessment:** Helps identify abnormal pH, turbidity, or TDS readings before water enters a purification process.
-
-4. **Water Purification Systems:** Can be integrated with suitable purification units to provide monitoring information about incoming water.
-
-5. **Educational Laboratories:** Demonstrates the practical integration of sensors, microcontrollers, Bluetooth communication, and web technologies.
-
-6. **Wireless Water Monitoring:** Enables users to observe sensor readings through a connected monitoring device without requiring Wi-Fi communication from the hardware.
-
-7. **Water Storage Monitoring:** Provides water-level and approximate volume information for storage containers.
+---
 
 # ⚡ Challenges Faced During Development
 
-During the development of the prototype, several hardware and software integration challenges were encountered.
+1. **Multi-Sensor Integration:** Coordinating multiple sensors with the Arduino Uno required careful pin allocation.
+2. **Sensor Calibration:** Establishing suitable reference values for pH, TDS, and turbidity was important for meaningful measurements.
+3. **Ultrasonic Measurement Stability:** Fluctuations affected water-level calculations, requiring multiple readings and filtering.
+4. **Water Volume Estimation:** The ultrasonic sensor required calibration against the container's empty and full reference distances.
+5. **LCD Compatibility:** Display configuration and I2C communication required testing to achieve stable operation.
+6. **Alert Integration:** Combining multiple screening conditions with LED and buzzer control required coordinated firmware logic.
+7. **Bluetooth Communication:** Correct baud rate, UART connections, and voltage-level interfacing were necessary.
+8. **Browser Serial Integration:** Connecting HC-05 Bluetooth Classic serial communication to a browser required a compatible Web Serial environment.
+9. **Live Dashboard Updates:** Incoming sensor packets had to be parsed and reflected consistently across gauges, graphs, and status indicators.
+10. **Historical Data Management:** Local data persistence and restoration required handling browser storage limitations.
+11. **Analytics Integration:** Statistical calculations, trend detection, and smart observations had to remain synchronized with incoming readings.
+12. **Responsive Interface Design:** The dashboard needed to remain usable across desktop and mobile screen sizes.
 
-1. **Multi-Sensor Integration:** Interfacing TDS, pH, turbidity, temperature, and ultrasonic sensors with a single Arduino Uno required careful pin allocation and coordination of sensor readings.
-
-2. **Sensor Calibration:** Establishing reference values for pH and turbidity was important for obtaining meaningful measurements.
-
-3. **Ultrasonic Measurement Stability:** Fluctuations in ultrasonic readings affected water-level calculations. Multiple readings and filtering techniques were incorporated to improve stability.
-
-4. **Water Volume Estimation:** Calibrating the ultrasonic sensor with the cylindrical 2-litre container required appropriate empty and full distance references.
-
-5. **Local Alert Integration:** Coordinating the LEDs and buzzer with the programmed screening conditions required combining multiple sensor readings into a single decision.
-
-6. **Bluetooth Communication:** Establishing reliable serial communication between Arduino Uno and HC-05 required correct baud-rate configuration, appropriate pin connections, and voltage-level interfacing.
-
-7. **Custom Web Dashboard Integration:** Receiving and interpreting Bluetooth serial data in the web monitoring interface required coordination between hardware communication and JavaScript-based data processing.
-
-8. **Live Data Visualization:** Updating sensor indicators, historical graphs, and event notifications consistently required careful handling of incoming sensor values.
-
-9. **Hardware and Software Coordination:** Maintaining consistent sensor updates across the LCD, alert system, Bluetooth communication, and web dashboard required careful firmware integration.
+---
 
 # 🔮 Future Scope
 
-The current prototype provides a foundation for further development. Several improvements can extend its monitoring and purification capabilities:
+1. **Additional Water Quality Parameters:** Integrate sensors for free chlorine, dissolved oxygen, conductivity, ORP, and other relevant indicators.
+2. **Advanced Turbidity Measurement:** Improve calibration and measurement accuracy using a validated optical sensing arrangement.
+3. **Automated Purification Control:** Integrate suitable pumps, valves, and filtration stages after implementing and validating the purification hardware.
+4. **Before-and-After Water Analysis:** Introduce separate sensing points to compare water conditions before and after purification.
+5. **Advanced Dashboard Analytics:** Extend historical analysis with parameter comparisons, longer-term reports, and more detailed statistical methods.
+6. **Improved Decision-Making:** Develop a more comprehensive screening mechanism using validated calibration and appropriate water-quality guidance.
+7. **Advanced Notifications:** Extend alert delivery through compatible notification services or applications.
+8. **Improved Sensor Accuracy:** Use more reliable sensors and standard calibration procedures.
+9. **Power Optimization:** Explore low-power operation and alternative power sources for remote deployment.
+10. **Extended Wireless Monitoring:** Explore additional communication technologies for longer-range and multi-device monitoring.
+11. **Cloud Data Integration:** Introduce optional remote storage and access to historical readings.
+12. **Filter Health Monitoring:** Explore additional sensors and validated methods to observe purification-system performance over time.
 
-1. **Additional Water Quality Parameters:** Integrate sensors for free chlorine, dissolved oxygen, conductivity, ORP, and other relevant water quality indicators.
-
-2. **Advanced Turbidity Measurement:** Improve turbidity calibration and measurement accuracy using a properly calibrated optical sensing arrangement.
-
-3. **Automated Purification Control:** Integrate suitable pumps, valves, and filtration stages to support controlled purification based on measured input-water conditions.
-
-4. **Before-and-After Water Analysis:** Introduce additional sensing points to compare water quality before and after purification.
-
-5. **Advanced Dashboard Analytics:** Add more detailed historical data analysis, parameter comparisons, and downloadable monitoring reports.
-
-6. **Improved Decision-Making:** Develop a more comprehensive water quality assessment mechanism using validated sensor calibration and suitable water quality standards.
-
-7. **Advanced Notifications:** Extend the monitoring interface with more detailed alerts when monitored parameters exceed configured limits.
-
-8. **Improved Sensor Accuracy:** Use more reliable sensors and standard calibration procedures to improve measurement consistency.
-
-9. **Power Optimization:** Explore low-power operation and alternative power sources for deployment in remote locations.
-
-10. **Extended Wireless Monitoring:** Explore additional communication technologies for longer-range monitoring and multi-device connectivity.
+---
 
 # 📌 Important Notes and Limitations
 
-- This project is an educational and prototype-level water quality monitoring and screening system.
-- TDS values in the current firmware are calculated using a simple analog mapping. They should not be treated as laboratory-calibrated TDS measurements.
+- AQUENZA is an educational and prototype-level water quality monitoring and screening system.
+- TDS values calculated using simple analog mapping are approximate and should not be treated as laboratory-calibrated measurements.
 - pH and turbidity readings depend on sensor calibration and measurement conditions.
-- The DHT11 is used for temperature and humidity measurement; humidity is not a water quality parameter.
-- The ultrasonic sensor measures water level and estimates volume. It does not measure water purity.
-- The configured screening limits are prototype conditions and do not establish that water is safe to drink.
-- The system does not replace laboratory testing or certified drinking-water assessment.
+- The DHT11 measures ambient temperature and humidity; it is not a waterproof water-temperature probe.
+- Humidity is an environmental measurement, not a water quality parameter.
+- The ultrasonic sensor measures water level and estimates volume; it does not measure water purity.
+- The dashboard's SAFE, CAUTION, and DANGER classifications are based on configured prototype thresholds.
+- The monitoring score is a programmed indicator and is not a certified water-quality index.
+- Browser-side alert rules do not control a pump or purifier.
+- Browser local storage is local to the browser and device; it is not automatic cloud backup.
+- Direct browser support for HC-05 Bluetooth Classic serial communication is not universal. The current dashboard uses the Web Serial API and requires a compatible browser and serial-port connection.
+- Desktop Chrome or Edge over HTTPS or localhost is the intended Web Serial environment. A compatible Bluetooth-to-serial COM port is required.
+- Android Chrome generally cannot directly access HC-05 Bluetooth Classic SPP through the Web Serial API. A compatible Android application or communication bridge may be needed.
+- The system does not detect every pathogen, chemical contaminant, or other potential drinking-water hazard.
+- The prototype does not replace laboratory testing or certified drinking-water assessment.
 - Physical purification performance should only be claimed after suitable purification hardware has been implemented and validated.
-- Bluetooth communication requires a compatible receiving device and communication interface. Direct browser support for HC-05 Bluetooth Classic serial communication is not universal. A compatible Android application or Bluetooth-to-web communication bridge may be required for the custom web dashboard.
 
-**The primary objective of this project is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water quality beyond TDS, using an Arduino-based embedded system, Bluetooth wireless communication, and a dedicated web monitoring interface.**
+---
+
+# 🎯 Project Objective
+
+The primary objective of AQUENZA is to demonstrate how multiple water quality parameters can be monitored together to provide a broader assessment of input water conditions beyond TDS alone.
+
+By combining an Arduino-based embedded monitoring system, Bluetooth wireless communication, a responsive custom web dashboard, colour-coded screening, historical data logging, and smart analytics, AQUENZA aims to make water monitoring more informative, accessible, and understandable.
+
+**AQUENZA – Sense More. Understand Better. Monitor Smarter.**
+
+Dashboard images: -
+<img width="1354" height="628" alt="Screenshot 2026-11-09 185511" src="https://github.com/user-attachments/assets/269c2a04-4bdd-4020-9cfc-bbe534f1b337" />
 <img width="1672" height="941" alt="AQUENZA Water Quality Dashboard (1)" src="https://github.com/user-attachments/assets/92563af3-5a04-4b7d-b393-104e18c3c97d" />
+
+Circuit Diagram :- 
 <img width="693" height="426" alt="Screenshot 2026-11-08 173621" src="https://github.com/user-attachments/assets/bd883c19-5308-4473-92c3-e5ca25aab91a" />
